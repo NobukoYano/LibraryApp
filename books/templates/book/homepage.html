@@ -1,13 +1,15 @@
 {% extends 'book/base.html'%} {%block body%}
 <div>
+    <div class="jumbotron" >
+        <p class="lead"><font size = '6'>Welcome to Library App</font></p>
+        <hr class="m-y-md">
+        <p>This is our library</p>                
+    </div>
     {% if books %}
     <ul>
-       
-       
-       
         <br\>
         <br\>
-         <main role="main">
+        <main role="main">
             {% if error_message %}
             <div class="alert alert-warning" role="alert">
                 <strong>{{error_message}</strong>
@@ -23,12 +25,12 @@
                             <div align='center'>
                                 {% load static %}
                                 <img class="card-img-top" src="{% static book.FrontPage %}" href="/book/{{book.id}}/detail" alt="Thumbnail [100%x100%]" style="height: 50%; width: 50%; display: block;"
-                                    data-holder-rendered="true">
+                                data-holder-rendered="true">
                             </div>
                             <div class="card-body">
                                 <div href = "/book/{{book.id}}/detail" >
-                                <h5 href = "/book/{{book.id}}/detail" class="card-title">{{book.BookName}}</h5></div>
-                                <br\>
+                                    <h5 href = "/book/{{book.id}}/detail" class="card-title">{{book.BookName}}</h5></div>
+                                    <br\>
                                     <p class="card-text">
                                         <font size='2'>Author：{{book.Author}}</font>
                                     </p>
@@ -46,29 +48,29 @@
                                             </a>
                                         </div>
                                     </div>
+                                </div>
                             </div>
                         </div>
+                        {%endfor%}
                     </div>
-                    {%endfor%}
                 </div>
+
+            </main>
+        </ul>
+        {% else %}
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-3">Sorry!</h1>
+                <p class="lead">There is no book in a library</p>
             </div>
-
-        </main>
-    </ul>
-    {% else %}
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-            <h1 class="display-3">Sorry!</h1>
-            <p class="lead">There is no book in a library</p>
         </div>
+        {% endif %}
     </div>
-    {% endif %}
-</div>
 
 
-<div class="uk-margin-large" style="text-align: center">
-    <a href="">
-        <span class="uk-text-meta">About the library</span>
-    </a>
-</div>
-{%endblock%}
+    <div class="uk-margin-large" style="text-align: center">
+        <a href="">
+            <span class="uk-text-meta">About the library</span>
+        </a>
+    </div>
+    {%endblock%}

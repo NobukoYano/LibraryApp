@@ -2,5 +2,13 @@ from django.contrib import admin
 from .models import Book, BorrowRecord
 
 # Register your models here.
-admin.site.register(Book)
-admin.site.register(BorrowRecord)
+
+class BookAdmin(admin.ModelAdmin):
+    readonly_fields = ('DateRegistered',)
+
+class BorrowRecordAdmin(admin.ModelAdmin):
+    readonly_fields = ('BeginTime',)
+
+
+admin.site.register(Book, BookAdmin)
+admin.site.register(BorrowRecord, BorrowRecordAdmin)

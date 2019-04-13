@@ -89,10 +89,10 @@ def create_book(request):
         info = request.POST.copy()
         if form.is_valid():
             print(info)
-            devoter_id = info.__getitem__('Devoter')
+            #devoter_id = info.__getitem__('Devoter')
             print(info.__getitem__('ISBN'))
-            print(devoter_id)
-            info.pop('Devoter')
+            #print(devoter_id)
+            #info.pop('Devoter')
             book = form.save(commit=False)
             thisISBN = book.ISBN
             existingISBN = Book.objects.filter(ISBN = thisISBN)
@@ -101,11 +101,11 @@ def create_book(request):
                 existingbook = existingISBN[0]
                 existingbook.Quantity += 1
                 existingbook.save()
-                if devoter_id != '':   
-                    devoter = User.objects.get(id = devoter_id)
-                    record = DevoteRecord(User = devoter,Book = existingbook)
-                    record.save()      
-                return HttpResponseRedirect('/book')
+                #if devoter_id != '':   
+                #    devoter = User.objects.get(id = devoter_id)
+                #    record = DevoteRecord(User = devoter,Book = existingbook)
+                #    record.save()      
+                return HttpResponseRedirect('/books')
             if existingBookName.count() > 0:
                 existingbook = existingBookName[0]
                 existingbook.Quantity += 1
@@ -114,7 +114,7 @@ def create_book(request):
                     devoter = User.objects.get(id = devoter_id)
                     record = DevoteRecord(User = devoter,Book = existingbook)
                     record.save()      
-                return HttpResponseRedirect('/book')
+                return HttpResponseRedirect('/books')
             # save the image front internet
             book.save()
             url = book.FrontPage
@@ -126,11 +126,11 @@ def create_book(request):
             book.save()
 
             ###deal with the devote record
-            if devoter_id != '':   
-                devoter = User.objects.get(id = devoter_id)
-                record = DevoteRecord(User = devoter,Book = book)
-                record.save()           
-            return HttpResponseRedirect('/book')
+            #if devoter_id != '':   
+            #    devoter = User.objects.get(id = devoter_id)
+            #    record = DevoteRecord(User = devoter,Book = book)
+            #    record.save()           
+            return HttpResponseRedirect('/books')
         context = {
             "form": form,
             "all_user" : User.objects.all(),
@@ -140,7 +140,7 @@ def create_book(request):
 
 def BorrowBook(request, book_id):
     if not request.user.is_authenticated:
-        return render(request , 'book/login.html' ,{ 'error_message' : " 请先登录"} )
+        return render(request , 'book/login.html' ,{ 'error_message' : "You need to login"} )
     else:    
 
         borrowRecords = BorrowRecord.objects.filter( Borrower = request.user ).filter(finished = False)
@@ -229,13 +229,13 @@ def register(request):
     context = {
         "form": form,
     }
-    return render(request, 'books/register.html', context)
+    return render(request, 'book/register.html', context)
 
-def devoterlist(request):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect("/books/login")
-    else:
-        context = {
-            'all_records': DevoteRecord.objects.all(),
-        }
-        return render(request,'books/devote.html',context)
+#def devoterlist(request):
+#    if not request.user.is_authenticated:
+#        return HttpResponseRedirect("/books/login")
+#    else:
+#        context = {
+#            'all_records': DevoteRecord.objects.all(),
+#        }
+#        return render(request,'book/devote.html',context)
