@@ -131,11 +131,13 @@ def create_book(request):
             #    record = DevoteRecord(User = devoter,Book = book)
             #    record.save()           
             return HttpResponseRedirect('/books')
-        context = {
-            "form": form,
-            "all_user" : User.objects.all(),
-        }
-        return render(request, 'book/add_book.html', context)
+        #context = {
+        #    "form": form,
+        #    "all_user" : User.objects.all(),
+        #}
+        #return render(request, 'book/add_book.html', context)
+        return render(request, 'book/add_book.html')
+
 
 
 def BorrowBook(request, book_id):
