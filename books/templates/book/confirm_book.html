@@ -1,0 +1,54 @@
+{% extends 'book/base.html' %}
+{% block title %}Confirm Book{% endblock %}
+{% block albums_active %}active{% endblock %}
+
+{% block body %}
+
+{% load staticfiles %}
+<div class="container-fluid" id = 'form-container'>
+
+    <div class="col-sm-12 col-md-10" align="center" id = 'form-container'>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="jumbotron">
+                    <p class="lead"><font size = '6'>Confirm a new book</font></p>
+                    <hr class="m-y-md">
+                    <p>Please check the following information! <br/> If you want to edit the info, click
+                    <a href="">
+                        <span class="uk-text-meta">here</span>
+                    </a>
+                    </p>
+                </div>
+                <form class="form-horizontal" role="form" action="{% url 'books:confirm' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-row justify-content-center">
+                        <div class="col-sm-1 align-self-center">
+                            <label class="control-label col-sm-1">ISBN: </label></label>
+                        </div>
+                        <div class="col-sm-4 align-self-start">
+                            <div class="col-sm-10"><input class="form-control" type="text" name="isbn" required id="id_ISBN" value="{{ isbn }}" readonly /> </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="form-row justify-content-center">
+                        <div class="col-sm-1 align-self-center">
+                            <label class="control-label col-sm-10">Title: </label></label>
+                        </div>
+                        <div class="col-sm-6 align-self-start">
+                            <input class="form-control" type="text" name="title" required id="id_title" value="{{ title }}" readonly />
+                        </div>
+                    </div>
+                        <div class="col-sm-12">&nbsp;</div>
+                        <div class="col-sm-4">
+                            <button class="btn btn-dark" v-on:click="regist">confirm</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <br/>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

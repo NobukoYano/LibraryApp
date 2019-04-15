@@ -14,21 +14,27 @@ class UserForm(forms.ModelForm):
         fields = ['username', 'email', 'password']
 
 
-class BorrowRecordForm(forms.ModelForm):
+#class BorrowRecordForm(forms.ModelForm):
 
-    class Meta:
-        model = BorrowRecord
-        fields = ['BookBorrowed']
+#    class Meta:
+#        model = BorrowRecord
+#        fields = ['BookBorrowed']
 
 class BookForm(forms.ModelForm):
+    #ISBN = forms.CharField()
+    #BookName = forms.CharField()
+    #FrontPage = forms.CharField()
+    #Author = forms.CharField()
+    #Publisher = forms.CharField()
+    #DatePublished = forms.DateField()
 
     class Meta:
         model = Book
         fields = [
-        'ISBN',
-        'BookName',
-        'FrontPage',
-        'Author',
-        'Publisher',
-        'Introduction',
+        'isbn',
+        'title',
+        'cover_url',
+        'author',
+        'publisher',
+        'pubdate',
     ]

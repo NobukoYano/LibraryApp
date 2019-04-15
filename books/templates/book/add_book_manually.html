@@ -1,0 +1,53 @@
+{% extends 'book/base.html' %}
+{% block title %}Add Book{% endblock %}
+{% block albums_active %}active{% endblock %}
+
+{% block body %}
+
+{% load staticfiles %}
+<script src = "{% static 'js/getinfo.js' %}"></script>
+
+
+<div class="container-fluid" id = 'form-container'>
+
+    <div class="col-sm-12 col-md-10" align="center" id = 'form-container'>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="jumbotron">
+                    <p class="lead"><font size = '6'>Add a new book</font></p>
+                    <hr class="m-y-md">
+                    <p>Click on the ISBN input field and simply scan the book's barcode to enter the book information</p>                    
+                </div>
+                {% if error_message %}
+                <div class="alert alert-warning" role="alert">
+                    <strong>Warning!</strong>{{error_message}
+                </div>
+                {% endif %}
+                <form class="form-horizontal" role="form" action="{% url 'books:book-add' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!--
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-10">
+                            <span class="text-danger small"></span>
+                        </div>
+                        <label class="control-label col-sm-10" for="id_ISBN">ISBN</label></label>
+                        <div class="col-sm-10"><input  class="form-control" type="text" name="ISBN" required id="id_ISBN" maxlength="30" placeholder="Please scan the barcode"/></div>
+                    </div>
+                    -->
+                    <table>{{BookForm.as_table}}</table>
+                    <br/>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-dark">submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>    
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+{% endblock %}

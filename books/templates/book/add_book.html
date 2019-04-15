@@ -14,94 +14,42 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="jumbotron">
-                    {% comment %} <h10 class="display-3"> Add a new book</h10> {% endcomment %}
                     <p class="lead"><font size = '6'>Add a new book</font></p>
                     <hr class="m-y-md">
-                    <p>Click on the ISBN input field and simply scan the book's barcode to enter the book information</p>
-                    
+                    <p>Enter the ISBN number and click search button! <br/> If you want to input manually, click
+                    <a href="/books/addmanually">
+                        <span class="uk-text-meta">here</span>
+                    </a>
+                    </p>
                 </div>
                 {% if error_message %}
                 <div class="alert alert-warning" role="alert">
                     <strong>Warning!</strong>{{error_message}
                 </div>
                 {% endif %}
-                <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                <form class="form-horizontal" role="form" action="{% url 'books:search' %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <div class="col-sm-offset-4 col-sm-10">
-                            <span class="text-danger small"></span>
+                    <div class="form-row justify-content-center">
+                        <div class="col-sm-4 align-self-center">
+                            <input class="form-control" type="text" name="isbn" required id="id_ISBN" maxlength="13" placeholder="Please input ISBN"/>
                         </div>
-                        <label class="control-label col-sm-10" for="song_title"><label for="id_ISBN">ISBN</label></label>
-                        <div class="col-sm-10"><input  class="form-control" type="text" name="ISBN" required id="id_ISBN" maxlength="30" placeholder="Please scan the barcode"/></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <span class="text-danger small"></span>
+                        <!--
+                        <div class="col col-sm-12">
+                            <textarea class="form-control" v-model="regist_isbn" cols="13" id="regist_isbn" name="isbn"
+                            rows="1" placeholder="Enter the ISBN code"></textarea>
                         </div>
-                        <label class="control-label col-sm-2" for="song_title"><label for="id_BookName">Title</label></label>
-                        <div class="col-sm-10"><input  class="form-control" type="text" name="BookName" required id="id_BookName" maxlength="250" /></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <span class="text-danger small"></span>
+                        <div class="col-sm-12">&nbsp;</div>
+                    -->
+                        <div class="col-sm-12">&nbsp;</div>
+                        <div class="col-sm-4">
+                            <button class="btn btn-dark" v-on:click="regist">search</button>
                         </div>
-                        <label class="control-label col-sm-2" for="song_title"><label for="id_FrontPage">Cover image</label></label>
-                        <div class="col-sm-10"><input  class="form-control" placeholder="The cover image URL" type="text" name="FrontPage" required id="id_FrontPage" maxlength="400" /></div>
                     </div>
-                    
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <span class="text-danger small"></span>
-                        </div>
-                        <label class="control-label col-sm-2" for="song_title"><label for="id_Author">Auther</label></label>
-                        <div class="col-sm-10"><input class="form-control"  type="text" name="Author" required id="id_Author" maxlength="100" /></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <span class="text-danger small"></span>
-                        </div>
-                        <label class="control-label col-sm-2" for="song_title"><label for="id_Publisher">Publisher</label></label>
-                        <div class="col-sm-10"><input  class="form-control" type="text" name="Publisher" placeholder="Publisher" required id="id_Publisher" maxlength="100" /></div>
-                    </div>
-                    <!--
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <span class="text-danger small"></span>
-                        </div>
-                        <label class="control-label col-sm-2" for="song_title"><label for="id_Devoter">Devoter</label></label>
-                        <div class="col-sm-10"><select  class="form-control" name="Devoter" id="id_Devoter">
-                          <option value="" selected>---------</option>
-                          {% for person in all_user%}
-                          <option value="{{person.id}}">{{person.username}}</option>
-                          {% endfor %}
-                          
-                          
-                      </select></div>
-                        -->
-                  </div>
-                  
-                  <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <span class="text-danger small"></span>
-                    </div>
-                    <label class="control-label col-sm-2" for="song_title"><label for="id_Introduction">Introduction:</label></label>
-                    <div class="col-sm-10"><textarea  class="form-control"  name="Introduction" id="id_Introduction" cols="40" required rows="10">
-                    </textarea></div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">submit</button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
+            <br/>
         </div>
     </div>
 </div>
 
-
-
-</div>
 {% endblock %}

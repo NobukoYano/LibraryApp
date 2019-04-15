@@ -4,15 +4,19 @@ from .models import *
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 from django.http import HttpResponse, Http404
-from .form import UserForm, BorrowRecordForm,BookForm
+from .form import UserForm, BookForm
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login,logout
 from django.db.models import Q
+from . import openbd
 
 import urllib.request 
 from PIL import Image
-
+import os
+from django.core.files import File
+from django.core.files.base import ContentFile
+import requests
 
 # Create your views here.
  
@@ -37,7 +41,8 @@ def index(request):
                 'books': books,
             })
         else:
-            books = Book.objects.filter(~Q(Quantity = 0))
+            #books = Book.objects.filter(~Q(Quantity = 0))
+            books = Book.objects.all()
             return render(request, 'book/homepage.html', {'books': books})
 
 def logout_user(request):
@@ -67,8 +72,6 @@ def login_user(request):
         return render(request, 'book/login_u.html')
 
 
-
-
 # def Detail(request,book_id):
 #     if not request.user.is_authenticated:
 #         return HttpResponseRedirect('book/login')
@@ -89,40 +92,39 @@ def create_book(request):
         info = request.POST.copy()
         if form.is_valid():
             print(info)
-            #devoter_id = info.__getitem__('Devoter')
-            print(info.__getitem__('ISBN'))
-            #print(devoter_id)
-            #info.pop('Devoter')
+            print(info.__getitem__('isbn'))
             book = form.save(commit=False)
-            thisISBN = book.ISBN
-            existingISBN = Book.objects.filter(ISBN = thisISBN)
-            existingBookName = Book.objects.filter(BookName = book.BookName)
+
+            thisISBN = book.isbn
+            existingISBN = Book.objects.filter(isbn = thisISBN)
+            existingTitle = Book.objects.filter(title = book.title)
             if existingISBN.count() > 0:
                 existingbook = existingISBN[0]
-                existingbook.Quantity += 1
+                existingbook.quantity += 1
                 existingbook.save()
-                #if devoter_id != '':   
-                #    devoter = User.objects.get(id = devoter_id)
-                #    record = DevoteRecord(User = devoter,Book = existingbook)
-                #    record.save()      
                 return HttpResponseRedirect('/books')
-            if existingBookName.count() > 0:
-                existingbook = existingBookName[0]
-                existingbook.Quantity += 1
+            if existingTitle.count() > 0:
+                existingbook = existingTitle[0]
+                existingbook.quantity += 1
                 existingbook.save()
-                if devoter_id != '':   
-                    devoter = User.objects.get(id = devoter_id)
-                    record = DevoteRecord(User = devoter,Book = existingbook)
-                    record.save()      
                 return HttpResponseRedirect('/books')
             # save the image front internet
             book.save()
-            url = book.FrontPage
-            data = urllib.request.urlretrieve(url)
-            frontpage = Image.open(data[0])
-            new_route = './book/static/' + str(book.id) + '_frontpage.jpg'
-            frontpage.save(new_route,'JPEG')
-            book.FrontPage = str(book.id) + '_frontpage.jpg'
+            print('before open')
+            response = requests.get(book.cover_url)
+            filename = str(book.id) + '_frontpage.jpg'
+            book.cover_image.save(filename, ContentFile(response.content), save=True)
+            #book.cover_image.save(
+            #    os.path.basename(book.cover_url),
+            #    File(open(data[0], encoding="utf-8_sig"))
+            #    )
+            print('after open')
+
+            #data = urllib.request.urlretrieve(book.cover_url)
+            #frontpage = Image.open(data[0])
+            #new_route = './books/static/' + str(book.id) + '_frontpage.jpg'
+            #frontpage.save(new_route,'JPEG')
+            #book.FrontPage = str(book.id) + '_frontpage.jpg'
             book.save()
 
             ###deal with the devote record
@@ -136,6 +138,9 @@ def create_book(request):
         #    "all_user" : User.objects.all(),
         #}
         #return render(request, 'book/add_book.html', context)
+        else:
+            print('test2')
+            print(form.errors.as_text())
         return render(request, 'book/add_book.html')
 
 
@@ -161,8 +166,8 @@ def BorrowBook(request, book_id):
         user = request.user
         book = Book.objects.get(pk=book_id)
         record = BorrowRecord(Borrower=request.user,BookBorrowed = book)
-        if book.Quantity >= 1:
-            book.Quantity -= 1
+        if book.quantity >= 1:
+            book.quantity -= 1
             book.save()
             record.save() 
             return HttpResponseRedirect("/books/%d/profile" % user.id)
@@ -186,7 +191,7 @@ def returnBook(request, book_id):
             thisRecord = BorrowRecord.objects.filter(Borrower = request.user , BookBorrowed = Book.objects.get(id = book_id)).filter(finished = False)
             thisRecord = thisRecord[0]
             source = Book.objects.get(id = thisRecord.BookBorrowed.id)
-            source.Quantity += 1
+            source.quantity += 1
             source.save()
             
             thisRecord.finished = True
@@ -241,3 +246,22 @@ def register(request):
 #            'all_records': DevoteRecord.objects.all(),
 #        }
 #        return render(request,'book/devote.html',context)
+
+
+def search(request):
+    if request.method == 'POST':
+        api = openbd.openBD()
+        data = api.get_json(request.POST['isbn'])
+        print(data['isbn'])
+        print(data['title'])
+        return render(request, 'book/confirm_book.html', {'isbn': data['isbn'], 'title': data['title']})
+
+
+def create_book_manually(request):
+    f = BookForm()
+    return render(request, 'book/add_book_manually.html', {'BookForm':f})
+
+
+def confirm_book(request):
+    print('book confirm')
+    return HttpResponseRedirect("/books")

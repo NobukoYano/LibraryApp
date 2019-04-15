@@ -5,15 +5,15 @@ from django.urls import reverse
 
 # Create your models here.
 class Book(models.Model):
-    ISBN = models.CharField(max_length = 30)
-    BookName = models.CharField(max_length = 250)
-    FrontPage = models.CharField (max_length = 400, default = 'static/no_frontpage.png')
-    Author = models.CharField(max_length = 100,default = "unknown")
-    Publisher = models.CharField(max_length = 100,default = "unknown")
-    Quantity = models.IntegerField(default=1)
-    Introduction = models.TextField()
-    DatePublished = models.DateField(null=True, blank=True)
-    DateRegistered = models.DateTimeField(auto_now_add=True)
+    isbn = models.CharField(max_length = 30)
+    title = models.CharField(max_length = 250)
+    cover_url = models.URLField()
+    cover_image = models.ImageField(upload_to='images/')
+    author = models.CharField(max_length = 100, default = "unknown")
+    publisher = models.CharField(max_length = 100,default = "unknown")
+    quantity = models.IntegerField(default=1)
+    pubdate = models.CharField(max_length = 20)
+    regdate = models.DateTimeField(auto_now_add=True)
     
      
     def get_absolute_urls(self): 
@@ -23,7 +23,7 @@ class Book(models.Model):
         )
 
     def __str__(self):
-        return self.BookName
+        return self.title
 
 
 class BorrowRecord(models.Model):
