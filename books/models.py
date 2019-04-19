@@ -33,5 +33,5 @@ class BorrowRecord(models.Model):
     EndTime = models.DateField(null=True, blank=True)
     finished = models.BooleanField(default = False)
     def __str__(self):
-        return self.Borrower.username + " borrowed " + self.BookBorrowed.BookName
+        return self.Borrower.username + " borrowed " + self.BookBorrowed.title
 

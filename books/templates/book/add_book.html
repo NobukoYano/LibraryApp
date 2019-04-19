@@ -1,12 +1,9 @@
 {% extends 'book/base.html' %}
 {% block title %}Add Book{% endblock %}
-{% block albums_active %}active{% endblock %}
 
 {% block body %}
 
 {% load staticfiles %}
-<script src = "{% static 'js/getinfo.js' %}"></script>
-
 
 <div class="container-fluid" id = 'form-container'>
 
@@ -16,7 +13,7 @@
                 <div class="jumbotron">
                     <p class="lead"><font size = '6'>Add a new book</font></p>
                     <hr class="m-y-md">
-                    <p>Enter the ISBN number and click search button! <br/> If you want to input manually, click
+                    <p>Enter the ISBN number without '-' and click search button! <br/> If you want to input manually, click
                     <a href="/books/addmanually">
                         <span class="uk-text-meta">here</span>
                     </a>
@@ -31,7 +28,7 @@
                     {% csrf_token %}
                     <div class="form-row justify-content-center">
                         <div class="col-sm-4 align-self-center">
-                            <input class="form-control" type="text" name="isbn" required id="id_ISBN" maxlength="13" placeholder="Please input ISBN"/>
+                            <input class="form-control" type="text" name="isbn" required maxlength="13" placeholder="Please input ISBN code"/>
                         </div>
                         <!--
                         <div class="col col-sm-12">

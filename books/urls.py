@@ -14,7 +14,7 @@ urlpatterns = [
     path('<int:user_id>/profile',views.userProfile, name = 'profile'),
     path('search', views.search, name = 'search'),
     path('addmanually',views.create_book_manually, name = "book-addman"),
-    path('confirm', views.confirm_book, name = "confirm"),
+    path('confirm', views.confirm_book, name = "confirm"),    
     
 #    path('devoterlist',views.devoterlist,name = 'devoter')
 ]

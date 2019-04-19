@@ -32,11 +32,11 @@ def index(request):
         query = request.GET.get("q")
         if query:
             books = books.filter(
-                Q(BookName__icontains=query) |
-                Q(Author__icontains=query) |
-                Q(Publisher__icontains=query)
+                Q(title__icontains=query) |
+                Q(author__icontains=query) |
+                Q(publisher__icontains=query)
             ).distinct()
-            books.filter(~Q(Quantity = 0))
+            books.filter(~Q(quantity = 0))
             return render(request, 'book/homepage.html', {
                 'books': books,
             })
@@ -91,8 +91,8 @@ def create_book(request):
         form = BookForm(request.POST or None, request.FILES or None)
         info = request.POST.copy()
         if form.is_valid():
-            print(info)
-            print(info.__getitem__('isbn'))
+            #print(info)
+            #print(info.__getitem__('isbn'))
             book = form.save(commit=False)
 
             thisISBN = book.isbn
@@ -110,7 +110,6 @@ def create_book(request):
                 return HttpResponseRedirect('/books')
             # save the image front internet
             book.save()
-            print('before open')
             response = requests.get(book.cover_url)
             filename = str(book.id) + '_frontpage.jpg'
             book.cover_image.save(filename, ContentFile(response.content), save=True)
@@ -118,7 +117,6 @@ def create_book(request):
             #    os.path.basename(book.cover_url),
             #    File(open(data[0], encoding="utf-8_sig"))
             #    )
-            print('after open')
 
             #data = urllib.request.urlretrieve(book.cover_url)
             #frontpage = Image.open(data[0])
@@ -138,9 +136,6 @@ def create_book(request):
         #    "all_user" : User.objects.all(),
         #}
         #return render(request, 'book/add_book.html', context)
-        else:
-            print('test2')
-            print(form.errors.as_text())
         return render(request, 'book/add_book.html')
 
 
@@ -252,8 +247,6 @@ def search(request):
     if request.method == 'POST':
         api = openbd.openBD()
         data = api.get_json(request.POST['isbn'])
-        print(data['isbn'])
-        print(data['title'])
         return render(request, 'book/confirm_book.html', {'isbn': data['isbn'], 'title': data['title']})
 
 
