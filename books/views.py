@@ -247,7 +247,16 @@ def search(request):
     if request.method == 'POST':
         api = openbd.openBD()
         data = api.get_json(request.POST['isbn'])
-        return render(request, 'book/confirm_book.html', {'isbn': data['isbn'], 'title': data['title']})
+
+        form = BookForm({
+            'isbn':data['isbn'],
+            'title':data['title'],
+            'cover_url':data['cover'],
+            'author':data['author'],
+            'publisher':data['publisher'],
+            'pubdate':data['pubdate'],        
+            })
+        return render(request, 'book/confirm_book.html', {'form1': form, 'cover_url': data['cover']})
 
 
 def create_book_manually(request):
