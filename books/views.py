@@ -41,8 +41,8 @@ def index(request):
                 'books': books,
             })
         else:
-            #books = Book.objects.filter(~Q(Quantity = 0))
-            books = Book.objects.all()
+            books = Book.objects.filter(~Q(quantity = 0))
+            #books = Book.objects.all()
             return render(request, 'book/homepage.html', {'books': books})
 
 def logout_user(request):
@@ -227,7 +227,7 @@ def register(request):
             if user.is_active:
                 login(request, user)
                 # borrowed_books = Book.objects.filter(user=request.user)
-                return render(request, 'books/homepage.html', {'books': Book.objects.all()})
+                return render(request, 'book/homepage.html', {'books': Book.objects.all()})
     context = {
         "form": form,
     }

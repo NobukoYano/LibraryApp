@@ -21,7 +21,11 @@
                 <div class="row">
                     {% for book in books %}
                     <div class="col-md-4">
+                        {% if book.quantity == 0 %}
+                        <div class="card mb-4 box-shadow bg-secondary">
+                        {% else %}
                         <div class="card mb-4 box-shadow">
+                        {% endif %}
                             <div align='center'>
                                 {% load static %}
                                 <img class="card-img-top" src="{{ book.cover_image.url }}" href="/book/{{book.id}}/detail" alt="Thumbnail [100%x100%]" style="height: 50%; width: 50%; display: block;"
@@ -38,6 +42,7 @@
                                         <font size='2'>Quantity：{{book.quantity}}</font>
                                     </p>
                                     <div class="d-flex justify-content-between align-items-center">
+                                        {% if book.quantity != 0 %}
                                         <div class="btn-group">
                                             <form action="{{book.id}}/borrow" method="POST">
                                                 {% csrf_token %}
@@ -47,6 +52,8 @@
                                                 <button type="button" class="btn btn-sm btn-outline-secondary">details</button>
                                             </a>
                                         </div>
+                                        {% endif %}
+                                    
                                     </div>
                                 </div>
                             </div>
