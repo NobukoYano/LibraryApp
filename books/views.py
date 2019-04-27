@@ -67,8 +67,6 @@ def login_user(request):
         else :
             return render(request, 'book/login_u.html',{'error_message' : "Please sign up"} )
     else:
-        # if status != 0:
-        #     return render(request,'book.login.html',{'error_message':'请先登录'})
         return render(request, 'book/login_u.html')
 
 
@@ -200,17 +198,28 @@ def userProfile(request,user_id):
     if not user.is_authenticated:
         return HttpResponseRedirect("/books/login")
     else:
+        books = Book.objects.all()
+        query = request.GET.get("q")
+        if query:
+            books = books.filter(
+                Q(title__icontains=query) |
+                Q(author__icontains=query) |
+                Q(publisher__icontains=query)
+            ).distinct()
+            books.filter(~Q(quantity = 0))
+            return render(request, 'book/homepage.html', {
+                'books': books,
+            })
+        else:
+            borrowRecords = BorrowRecord.objects.filter( Borrower = request.user ).filter(finished = False)
+            borrowed_books = set()
 
-        borrowRecords = BorrowRecord.objects.filter( Borrower = request.user ).filter(finished = False)
+            for record in borrowRecords:
+                borrowed_books.add(record.BookBorrowed.pk)
 
-        borrowed_books = set()
+            borrowed_books = Book.objects.filter(pk__in = borrowed_books)
 
-        for record in borrowRecords:
-            borrowed_books.add(record.BookBorrowed.pk)
-
-        borrowed_books = Book.objects.filter(pk__in = borrowed_books)
-
-        return render(request , 'book/userprofile.html' , {'books': borrowed_books})
+            return render(request , 'book/userprofile.html' , {'books': borrowed_books})
         
 
 

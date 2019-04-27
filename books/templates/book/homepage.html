@@ -20,11 +20,11 @@
             <div class="container">
                 <div class="row">
                     {% for book in books %}
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         {% if book.quantity == 0 %}
-                        <div class="card mb-4 box-shadow bg-secondary">
+                        <div class="card mb-3 box-shadow bg-secondary">
                         {% else %}
-                        <div class="card mb-4 box-shadow">
+                        <div class="card mb-3 box-shadow">
                         {% endif %}
                             <div align='center'>
                                 {% load static %}
@@ -48,8 +48,8 @@
                                                 {% csrf_token %}
                                                 <button type="submit" class="btn btn-sm btn-outline-secondary">Rent</button>
                                             </form>
-                                            <a href="https://book.douban.com/subject_search?search_text={{book.ISBN}}&cat=1001">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">details</button>
+                                            <a href="">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary">Request</button>
                                             </a>
                                         </div>
                                         {% endif %}
