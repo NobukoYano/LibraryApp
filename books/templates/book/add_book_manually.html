@@ -14,11 +14,12 @@
                     <hr class="m-y-md">
                     <p>Click on the ISBN input field and simply scan the book's barcode to enter the book information</p>                    
                 </div>
-                {% if error_message %}
-                <div class="alert alert-warning" role="alert">
-                    <strong>Warning!</strong>{{error_message}
-                </div>
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                {% endfor %}
                 {% endif %}
+
                 <form class="form-horizontal" role="form" action="{% url 'books:book-add' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {% comment %}

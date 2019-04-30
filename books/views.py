@@ -245,8 +245,13 @@ def register(request):
 
 def search(request):
     if request.method == 'GET':
+        isbn = request.GET.get('isbn',False)
         api = openbd.openBD()
-        data = api.get_json(request.GET['isbn'])
+        data = api.get_json(isbn)
+
+        if data == None:
+            messages.warning(request, 'The book was not found!') 
+            return render(request, 'book/add_book.html')
 
         form = BookForm({
             'isbn':data['isbn'],
