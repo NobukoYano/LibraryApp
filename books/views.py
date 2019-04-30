@@ -17,6 +17,8 @@ import os
 from django.core.files import File
 from django.core.files.base import ContentFile
 import requests
+from django.contrib import messages
+
 
 # Create your views here.
  
@@ -41,8 +43,8 @@ def index(request):
                 'books': books,
             })
         else:
-            books = Book.objects.filter(~Q(quantity = 0))
-            #books = Book.objects.all()
+            #books = Book.objects.filter(~Q(quantity = 0))
+            books = Book.objects.all()
             return render(request, 'book/homepage.html', {'books': books})
 
 def logout_user(request):
@@ -116,18 +118,10 @@ def create_book(request):
             #    File(open(data[0], encoding="utf-8_sig"))
             #    )
 
-            #data = urllib.request.urlretrieve(book.cover_url)
-            #frontpage = Image.open(data[0])
-            #new_route = './books/static/' + str(book.id) + '_frontpage.jpg'
-            #frontpage.save(new_route,'JPEG')
-            #book.FrontPage = str(book.id) + '_frontpage.jpg'
             book.save()
 
-            ###deal with the devote record
-            #if devoter_id != '':   
-            #    devoter = User.objects.get(id = devoter_id)
-            #    record = DevoteRecord(User = devoter,Book = book)
-            #    record.save()           
+            messages.success(request, 'The book {} was successfully added!'.format(book.title)) 
+
             return HttpResponseRedirect('/books')
         #context = {
         #    "form": form,
@@ -150,10 +144,7 @@ def BorrowBook(request, book_id):
         for record in borrowRecords:
             borrowed_books.add(record.BookBorrowed.pk)
         if book_id in borrowed_books:
-            context = {
-                'books':Book.objects.all(),
-                'error_message': "You have already borrowed this book",
-            }
+            messages.warning(request, 'You have already borrowed this book.') 
             return HttpResponseRedirect('/books')
         
         user = request.user
