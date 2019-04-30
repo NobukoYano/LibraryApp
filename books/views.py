@@ -246,6 +246,12 @@ def register(request):
 def search(request):
     if request.method == 'GET':
         isbn = request.GET.get('isbn',False)
+
+        isbn.replace('-','')
+        if not isbn.isdigit() or len(isbn) != 13:
+            messages.warning(request, 'The isbn code should be 13 digits (without hyphen)') 
+            return render(request, 'book/add_book.html')
+
         api = openbd.openBD()
         data = api.get_json(isbn)
 
