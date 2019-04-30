@@ -24,19 +24,12 @@
                     <strong>Warning!</strong>{{error_message}
                 </div>
                 {% endif %}
-                <form class="form-horizontal" role="form" action="{% url 'books:search' %}" method="POST" enctype="multipart/form-data">
+                <form class="form-horizontal" role="form" action="{% url 'books:search' %}" method="GET" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-row justify-content-center">
                         <div class="col-sm-4 align-self-center">
                             <input class="form-control" type="text" name="isbn" required maxlength="13" placeholder="Please input ISBN code"/>
                         </div>
-                        <!--
-                        <div class="col col-sm-12">
-                            <textarea class="form-control" v-model="regist_isbn" cols="13" id="regist_isbn" name="isbn"
-                            rows="1" placeholder="Enter the ISBN code"></textarea>
-                        </div>
-                        <div class="col-sm-12">&nbsp;</div>
-                    -->
                         <div class="col-sm-12">&nbsp;</div>
                         <div class="col-sm-4">
                             <button class="btn btn-dark" v-on:click="regist">search</button>

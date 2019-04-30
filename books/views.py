@@ -244,9 +244,9 @@ def register(request):
 
 
 def search(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
         api = openbd.openBD()
-        data = api.get_json(request.POST['isbn'])
+        data = api.get_json(request.GET['isbn'])
 
         form = BookForm({
             'isbn':data['isbn'],
