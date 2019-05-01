@@ -8,6 +8,9 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   
+  <link href="{% static 'open-iconic-master/font/css/open-iconic-bootstrap.css' %}" rel="stylesheet">
+  
+
   <style>
     .bd-placeholder-img {
       font-size: 1.125rem;
@@ -43,20 +46,29 @@
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <a class="nav-link" href="{% url 'books:book-add' %}">
-              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Add Book
+              <span class="oi oi-plus"  title="Add" aria-hidden="true"></span> Add
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/books/{{user.id}}/profile">
-              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; My Bookshelf
+            <a class="nav-link" href="/books/{{user.id}}/borrowed">
+              <span class="oi oi-book"></span> Borrowed
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'books:ownedbooks'%}">
+              <span class="oi oi-book"></span> Owned
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'books:howto'%}">
+              <span class="oi oi-question-mark"></span> HowTo
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'books:logout'%}">
-              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; logout
+              &nbsp; logout
             </a>
           </li>
-
         </ul>
         <form class="form-inline my-2 my-lg-0">
           <input class="form-control mr-sm-2" type="search" name = 'q' value="{{ request.GET.q }}" placeholder="title，author，ISBN" aria-label="Search">

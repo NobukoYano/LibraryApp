@@ -10,7 +10,7 @@
         <br\>
         <br\>
         <main role="main">
-    
+
             {% if messages %}
             {% for message in messages %}
             <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
@@ -26,58 +26,55 @@
                         {% else %}
                         <div class="card mb-3 box-shadow">
                         {% endif %}
+                                
                             <div align='center'>
                                 {% load static %}
-                                <img class="card-img-top" src="{{ book.cover_image.url }}" href="/book/{{book.id}}/detail" alt="Thumbnail [100%x100%]" style="height: 50%; width: 50%; display: block;"
-                                data-holder-rendered="true">
+                                <img class="card-img-top" src="{{ book.cover_image.url }}" href="/book/{{book.id}}/detail" alt="no image" style="height: 70%; width: 70%; display: block;" data-holder-rendered="true">
                             </div>
+                        
                             <div class="card-body">
                                 <div href = "/book/{{book.id}}/detail" >
-                                    <h5 href = "/book/{{book.id}}/detail" class="card-title">{{book.title}}</h5></div>
-                                    <br\>
-                                    <p class="card-text">
-                                        <font size='2'>Author：{{book.author}}</font>
-                                    </p>
-                                    <p class="card-text">
-                                        <font size='2'>Quantity：{{book.quantity}}</font>
-                                    </p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        {% if book.quantity != 0 %}
-                                        <div class="btn-group">
-                                            <form action="{{book.id}}/borrow" method="POST">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-sm btn-outline-secondary">Rent</button>
-                                            </form>
-                                            <a href="">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">Request</button>
-                                            </a>
-                                        </div>
-                                        {% endif %}
-                                    
+                                    <h5 href = "/book/{{book.id}}/detail" class="card-title">{{book.title}}</h5>
+                                </div>
+                                <br\>
+                            
+                                <p class="card-text">
+                                    <font size='2'>Author：{{book.author}}</font>
+                                </p>
+                                <p class="card-text">
+                                    <font size='2'>Quantity：{{book.quantity}}</font>
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    {% if book.quantity != 0 %}
+                                    <div class="btn-group">
+                                        <form action="{{book.id}}/borrow" method="POST">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-outline-secondary">Rent</button>
+                                        </form>
+                                        <a href="">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">Request</button>
+                                        </a>
                                     </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
-                        {%endfor%}
                     </div>
+                    {%endfor%}
                 </div>
+            </div>
 
-            </main>
-        </ul>
-        {% else %}
+        </main>
+    </ul>
+    {% else %}
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
                 <h1 class="display-3">Sorry!</h1>
                 <p class="lead">There is no book in a library</p>
             </div>
         </div>
-        {% endif %}
+    {% endif %}
     </div>
 
 
-    <div class="uk-margin-large" style="text-align: center">
-        <a href="">
-            <span class="uk-text-meta">About the library</span>
-        </a>
-    </div>
-    {%endblock%}
+{%endblock%}

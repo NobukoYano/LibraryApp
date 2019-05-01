@@ -5,9 +5,11 @@
   <title>{% block title %}Library App{% endblock %}</title>
   {% load staticfiles %}
   <link rel="shortcut icon" type="image/png" href="{%  static 'shelf.png' %}"/>
-  {% comment %} <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"> {% endcomment %}
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  
+  <link href="{% static 'open-iconic-master/font/css/open-iconic-bootstrap.css' %}" rel="stylesheet">
+
   <style>
     .bd-placeholder-img {
       font-size: 1.125rem;
@@ -26,10 +28,13 @@
 
 </head>
 
+
 <body>
 
+
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="{% url 'books:homepage' %}">Library App</a>
+    <a class="navbar-brand" href="{% url 'homepage_guest' %}">
+    <img src="{% static 'shelf_w.png'%}" height=25 width=25 class="d-inlune-block align-top" />Library App</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

@@ -1,0 +1,50 @@
+{% extends 'book/base.html'%}
+{%block body%}
+<div id = 'form-container'>
+    <div class="jumbotron" >
+        <p class="lead"><font size = '6'>My owned books</font></p>
+        <hr class="m-y-md">
+        <p>Your registered books</p>                
+    </div>
+    {% if books %}
+    <ul>
+        {% load static %}
+
+        <main role="main">
+
+            <div class="container">
+                <div class="row">
+                    {% for book in books %}
+                    <div class="col-md-4">
+                        <div class="card mb-4 box-shadow">
+                            <div align='center'>
+                                <img class="card-img-top" src="{{ book.cover_image.url }}" href="/books/{{book.id}}/detail" alt="Thumbnail [100%x100%]" style="height: 50%; width: 50%; display: block;"
+                                data-holder-rendered="true">
+                            </div>
+                            <div class="card-body">
+                                <div href = "/books/{{book.id}}/detail" >
+                                    <h5 href = "/books/{{book.id}}/detail" class="card-title">{{book.title}}</h5></div>
+                                    <br\>
+                                    <p class="card-text">
+                                        <font size='2'>Auther: {{book.author}}</font>
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                                            <form action="/books/{{book.id}}/delete" method="POST">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {%endfor%}
+                    </div>
+                </div>
+
+            </main>
+    </ul>
+    {% endif %}
+</div>
+{%endblock%}

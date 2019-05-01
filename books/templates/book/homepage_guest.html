@@ -3,58 +3,14 @@
     <div class="jumbotron" >
         <p class="lead"><font size = '6'>Welcome to Library App</font></p>
         <hr class="m-y-md">
-        <p>This is our library</p>                
+        <p>This application enables to share books among users!</p>
+        <p>You can borrow any books in the library, register your books in the library and lend them to other members.</p><br/>
+        <p>To use LibraryApp, you need to 
+            <a href="/books/register"><span class="uk-text-meta">SignUp</span></a>
+            or 
+            <a href="/books/login"><span class="uk-text-meta">Login</span></a>
+        </p><br/>
     </div>
-    {% if books %}
-    <ul>
-        {% load staticfiles %}
-        <link rel="stylesheet" type="text/css" href="{% static 'book/list-style.css' %}" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-         <!-- Custom styles for this template -->
-    <link href="/static/book/card.css" rel="stylesheet">
-        <main role="main">
-            <div class="album py-5 bg-light">
-                <div class="container"> 
-
-                    <div class="row">
-                            {% for book in books %}
-                                <div class="col-md-4">
-                                    <div class="card mb-4 box-shadow">
-                                        <img class="card-img-top" data-src="text=Thumbnail" alt="Thumbnail [100%x225]" style="height: 225px; width: 200px; display: block;"
-                                        {% load staticfiles %}    
-                                        src="{% static book.FrontPage %}"datat-holder-rendered="true">
-                                        <div class="card-body">
-                                            <p class="card-text">Title：《{{book.name}}》</p>
-                                            <p class="card-text">Quantity：{{book.Quantity}}</p>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary">Details</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {%endfor%}
-                    </div>
-                </div>
-            </div>
-
-        </main>
-    </ul>
-    {% else %}
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-          <h1 class="display-3">歇菜了！</h1>
-          <p class="lead">书架上一本书都没有</p>
-        </div>
-      </div>
-    {% endif %}
 </div>
 
-
-<div class="uk-margin-large" style="text-align: center">
-    <a href="">
-        <span class="uk-text-meta">关于书库</span>
-    </a>
-</div>
 {%endblock%}

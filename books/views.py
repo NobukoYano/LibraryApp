@@ -25,6 +25,13 @@ from django.contrib import messages
 all_book = Book.objects.all()
 
 
+def index_guest(request):
+    # ToDo filter books
+    books = Book.objects.all()
+
+    return render(request, 'book/homepage_guest.html', {'books': books})
+
+
 def index(request):
     if not request.user.is_authenticated:
         books = Book.objects.all()
@@ -154,7 +161,7 @@ def BorrowBook(request, book_id):
             book.quantity -= 1
             book.save()
             record.save() 
-            return HttpResponseRedirect("/books/%d/profile" % user.id)
+            return HttpResponseRedirect("/books/%d/borrowed" % user.id)
         else:
             return Http404
 
@@ -169,7 +176,7 @@ def returnBook(request, book_id):
             borrowed_books_id.add(record.BookBorrowed.pk)
         borrowed_books = Book.objects.filter(pk__in = borrowed_books_id)
         if book_id not in borrowed_books_id:
-            return HttpResponseRedirect('/books/%d/profile' % request.user.id)
+            return HttpResponseRedirect('/books/%d/borrowed' % request.user.id)
         else:
             print('success')
             thisRecord = BorrowRecord.objects.filter(Borrower = request.user , BookBorrowed = Book.objects.get(id = book_id)).filter(finished = False)
@@ -181,10 +188,10 @@ def returnBook(request, book_id):
             thisRecord.finished = True
             thisRecord.save()
 
-            return HttpResponseRedirect('/books/%d/profile' % request.user.id)
+            return HttpResponseRedirect('/books/%d/borrowed' % request.user.id)
 
 
-def userProfile(request,user_id):
+def borrowed(request,user_id):
     user = request.user
     if not user.is_authenticated:
         return HttpResponseRedirect("/books/login")
@@ -210,7 +217,7 @@ def userProfile(request,user_id):
 
             borrowed_books = Book.objects.filter(pk__in = borrowed_books)
 
-            return render(request , 'book/userprofile.html' , {'books': borrowed_books})
+            return render(request , 'book/borrowed.html' , {'books': borrowed_books})
         
 
 
@@ -278,3 +285,10 @@ def create_book_manually(request):
 def confirm_book(request):
     print('book confirm')
     return HttpResponseRedirect("/books")
+
+def howto(request):
+    return render(request, 'book/howto.html')
+
+
+def ownedbooks(request):
+    return render(request, 'book/ownedbooks.html')
