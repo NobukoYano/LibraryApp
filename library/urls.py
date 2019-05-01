@@ -22,6 +22,6 @@ import books.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', books.views.index_guest, name = 'homepage_guest'),    
+    path('', books.views.top, name = 'top'),    
     path('books/',include("books.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -47,13 +47,13 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     {% if book.quantity != 0 %}
                                     <div class="btn-group">
+                                        <a href="">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">Contact</button>
+                                        </a>                                        
                                         <form action="{{book.id}}/borrow" method="POST">
                                             {% csrf_token %}
-                                            <button type="submit" class="btn btn-sm btn-outline-secondary">Rent</button>
+                                            <button type="submit" class="btn btn-sm btn-outline-secondary">Borrow</button>
                                         </form>
-                                        <a href="">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">Request</button>
-                                        </a>
                                     </div>
                                     {% endif %}
                                 </div>

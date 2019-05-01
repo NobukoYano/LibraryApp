@@ -25,11 +25,11 @@ from django.contrib import messages
 all_book = Book.objects.all()
 
 
-def index_guest(request):
+def top(request):
     # ToDo filter books
     books = Book.objects.all()
 
-    return render(request, 'book/homepage_guest.html', {'books': books})
+    return render(request, 'book/top.html', {'books': books})
 
 
 def index(request):

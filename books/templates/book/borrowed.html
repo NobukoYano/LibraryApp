@@ -37,13 +37,13 @@
                                     </p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
+                                            <a href="">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary">Contact</button>
+                                            </a>
                                             <form action="/books/{{book.id}}/return" method="POST">
                                                 {% csrf_token %}
                                                 <button type="submit" class="btn btn-sm btn-outline-secondary">Return</button>
-                                            </form>
-                                            <a href="">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">Request</button>
-                                            </a>
+                                            </form>                                            
                                         </div>
                                     </div>
                                 </div>
