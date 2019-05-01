@@ -44,6 +44,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
+          {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'books:book-add' %}">
               <span class="oi oi-plus"  title="Add" aria-hidden="true"></span> Add
@@ -69,11 +70,21 @@
               &nbsp; logout
             </a>
           </li>
+          {% else %}
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'books:register'%}">Sign Up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'books:login'%}">Login</a>
+          </li>          
+          {% endif %}
         </ul>
+        {% if user.is_authenticated %}
         <form class="form-inline my-2 my-lg-0">
           <input class="form-control mr-sm-2" type="search" name = 'q' value="{{ request.GET.q }}" placeholder="title，author，ISBN" aria-label="Search">
           <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
         </form>
+        {% endif %}
       </div>
     </div>
   </nav>
