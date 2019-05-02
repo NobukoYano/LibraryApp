@@ -1,8 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Book,BorrowRecord
-
+from .models import Book
 
 
 class UserForm(forms.ModelForm):
@@ -14,27 +13,21 @@ class UserForm(forms.ModelForm):
         fields = ['username', 'email', 'password']
 
 
-#class BorrowRecordForm(forms.ModelForm):
+# class BorrowRecordForm(forms.ModelForm):
 
 #    class Meta:
 #        model = BorrowRecord
 #        fields = ['BookBorrowed']
 
 class BookForm(forms.ModelForm):
-    #ISBN = forms.CharField()
-    #BookName = forms.CharField()
-    #FrontPage = forms.CharField()
-    #Author = forms.CharField()
-    #Publisher = forms.CharField()
-    #DatePublished = forms.DateField()
 
     class Meta:
         model = Book
         fields = [
-        'isbn',
-        'title',
-        'cover_url',
-        'author',
-        'publisher',
-        'pubdate',
-    ]
+            'isbn',
+            'title',
+            'cover_url',
+            'author',
+            'publisher',
+            'pubdate',
+            ]

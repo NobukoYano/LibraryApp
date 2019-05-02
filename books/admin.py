@@ -3,8 +3,10 @@ from .models import Book, BorrowRecord
 
 # Register your models here.
 
+
 class BookAdmin(admin.ModelAdmin):
     readonly_fields = ('regdate',)
+
 
 class BorrowRecordAdmin(admin.ModelAdmin):
     readonly_fields = ('BeginTime',)

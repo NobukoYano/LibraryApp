@@ -1,6 +1,7 @@
 import json
 import requests
 
+
 class openBD:
     '''
     openBD API
@@ -11,7 +12,7 @@ class openBD:
         '''
         pass
 
-    def get_json(self, isbn:str) -> dict:
+    def get_json(self, isbn: str) -> dict:
         '''
         extract book info from openBD API
         Parameters
@@ -28,11 +29,11 @@ class openBD:
         json_api_data = self.__call_web_api(isbn)
 
         # if it failed
-        if json_api_data == None:
+        if json_api_data is None:
             return None
-        
+
         # if it succeed
-        if json_api_data[0] == None:
+        if json_api_data[0] is None:
             return None
         # extract summary info.
         json_data = {}
@@ -44,15 +45,16 @@ class openBD:
         json_data['author'] = json_api_data[0]['summary']['author']
 
         # isbnコードが込み入った形で格納されている
-        # industryIdentifiers = json_api_data['items'][0]['volumeInfo']['industryIdentifiers']
+        # industryIdentifiers =
+        #     json_api_data['items'][0]['volumeInfo']['industryIdentifiers']
         # for item in industryIdentifiers:
         #     if item['type'] == 'ISBN_13':
         #         json_data['isbn'] = item['identifier']
         #         break
 
         return json_data
-        
-    def __call_web_api(self, isbn:str) -> dict:
+
+    def __call_web_api(self, isbn: str) -> dict:
         '''
         Calling openBD API, get json data of the book
         Parameters
@@ -67,7 +69,7 @@ class openBD:
         '''
         url = 'https://api.openbd.jp/v1/get?isbn=' + isbn
 
-        # Calling WebAPI 
+        # Calling WebAPI
         response = requests.get(url)
 
         # Check the status code
@@ -77,7 +79,7 @@ class openBD:
             return None
 
         # if succeed
-        json_text = response.text      
+        json_text = response.text
 
         # Exchange into dictionary
         json_data = json.loads(json_text)
