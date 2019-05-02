@@ -3,3 +3,4 @@ requests==2.21.0
 Pillow==6.0.0
 flake8==3.7.7
 psycopg2==2.8.2
+django-widget-tweaks=1.4.3

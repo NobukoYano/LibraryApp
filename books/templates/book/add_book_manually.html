@@ -12,7 +12,7 @@
                 <div class="jumbotron">
                     <p class="lead"><font size = '6'>Add a new book</font></p>
                     <hr class="m-y-md">
-                    <p>Click on the ISBN input field and simply scan the book's barcode to enter the book information</p>                    
+                    <p>Enter following informations!</p>                    
                 </div>
                 {% if messages %}
                 {% for message in messages %}
@@ -22,15 +22,6 @@
 
                 <form class="form-horizontal" role="form" action="{% url 'books:book-add' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {% comment %}
-                    <div class="form-group">
-                        <div class="col-sm-offset-4 col-sm-10">
-                            <span class="text-danger small"></span>
-                        </div>
-                        <label class="control-label col-sm-10" for="id_ISBN">ISBN</label></label>
-                        <div class="col-sm-10"><input  class="form-control" type="text" name="ISBN" required id="id_ISBN" maxlength="30" placeholder="Please scan the barcode"/></div>
-                    </div>
-                    {% endcomment %}                    
                     <table>{{BookForm.as_table}}</table>
                     <br/>
                     <div class="form-group">

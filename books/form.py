@@ -1,16 +1,22 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 from .models import Book
 
 
-class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)
-    school_ID = forms.IntegerField()
+class UserForm(UserCreationForm):
+    # password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+#            'password'
+            ]
 
 
 # class BorrowRecordForm(forms.ModelForm):

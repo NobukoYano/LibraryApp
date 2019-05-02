@@ -240,24 +240,17 @@ def borrowed(request, user_id):
 
 
 def register(request):
-    form = UserForm(request.POST or None)
-    if form.is_valid():
-        user = form.save(commit=False)
-        username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
-        user.set_password(password)
-        user.save()
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                # borrowed_books = Book.objects.filter(user=request.user)
-                return render(request, 'book/homepage.html',
-                              {'books': Book.objects.all()})
-    context = {
-        "form": form,
-    }
-    return render(request, 'book/register.html', context)
+    if request.method == 'POST' or request.method == 'GET':
+        form = UserForm(request.POST or None)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return HttpResponseRedirect('/books')
+        print(form.errors)    
+        return render(request, 'book/register.html', {'form': form})
+    else:
+        f = UserForm()
+        return render(request, 'book/register.html', {'form': f})
 
 # def devoterlist(request):
 #    if not request.user.is_authenticated:
@@ -277,7 +270,7 @@ def search(request):
 
         if not isbn.isdigit() or len(isbn) != 13:
             messages.warning(
-                request, 'The isbn code should be 13 digits (without hyphen)'
+                request, 'The isbn code should be 13 digits'
                 )
             return render(request, 'book/add_book.html')
 
