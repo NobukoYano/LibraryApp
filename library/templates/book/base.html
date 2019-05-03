@@ -51,12 +51,12 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/books/{{user.id}}/borrowed">
+            <a class="nav-link" href="{% url 'books:borrowed' user.id %}">
               <span class="oi oi-book"></span> Borrowed
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'books:ownedbooks'%}">
+            <a class="nav-link" href="{% url 'books:ownedbooks' user.id %}">
               <span class="oi oi-book"></span> Owned
             </a>
           </li>

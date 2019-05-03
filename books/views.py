@@ -28,6 +28,17 @@ from . import openbd
 all_book = Book.objects.all()
 
 
+def query_book(query):
+    books = Book.objects.all()
+    books = books.filter(
+        Q(title__icontains=query) |
+        Q(author__icontains=query) |
+        Q(publisher__icontains=query)
+    ).distinct()
+    # books.filter(~Q(quantity=0))
+    return books
+
+
 def top(request):
     # ToDo filter books
     books = Book.objects.all()
@@ -37,15 +48,9 @@ def top(request):
 
 @login_required(login_url='/accounts/login/')
 def index(request):
-    books = Book.objects.all()
     query = request.GET.get("q")
     if query:
-        books = books.filter(
-            Q(title__icontains=query) |
-            Q(author__icontains=query) |
-            Q(publisher__icontains=query)
-        ).distinct()
-        books.filter(~Q(quantity=0))
+        books = query_book(query)
         return render(request, 'book/homepage.html', {
             'books': books,
         })
@@ -183,15 +188,9 @@ def returnBook(request, book_id):
 
 @login_required(login_url='/accounts/login/')
 def borrowed(request, user_id):
-    books = Book.objects.all()
     query = request.GET.get("q")
     if query:
-        books = books.filter(
-            Q(title__icontains=query) |
-            Q(author__icontains=query) |
-            Q(publisher__icontains=query)
-        ).distinct()
-        books.filter(~Q(quantity=0))
+        books = query_book(query)
         return render(request, 'book/homepage.html', {
             'books': books,
         })
@@ -282,5 +281,17 @@ def howto(request):
 
 
 @login_required(login_url='/accounts/login/')
-def ownedbooks(request):
-    return render(request, 'book/ownedbooks.html')
+def ownedbooks(request, user_id):
+    query = request.GET.get("q")
+    if query:
+        books = query_book(query)
+        # return HttpResponseRedirect("/books")
+        return render(request, 'book/homepage.html', {
+            'books': books,
+        })
+    else:
+        
+        owned_books = Book.objects.filter(owner=user_id)
+
+        return render(request, 'book/ownedbooks.html',
+                      {'books': owned_books})

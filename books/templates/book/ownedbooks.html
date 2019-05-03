@@ -16,7 +16,11 @@
                 <div class="row">
                     {% for book in books %}
                     <div class="col-md-4">
+                        {% if book.quantity == 0 %}
+                        <div class="card mb-3 box-shadow bg-secondary">
+                        {% else %}
                         <div class="card mb-4 box-shadow">
+                        {% endif %}
                             <div align='center'>
                                 <img class="card-img-top" src="{{ book.cover_image.url }}" href="/books/{{book.id}}/detail" alt="Thumbnail [100%x100%]" style="height: 50%; width: 50%; display: block;"
                                 data-holder-rendered="true">
@@ -27,14 +31,20 @@
                                     <br\>
                                     <p class="card-text">
                                         <font size='2'>Auther: {{book.author}}</font>
+                                        <br/>
+                                        <font size='2'>Owner：{{book.owner.last_name}} {{book.owner.first_name}}</font>
+                                        <br/>
+                                        <font size='2'>Quantity：{{book.quantity}}</font>
                                     </p>
                                     <div class="d-flex justify-content-between align-items-center">
+                                        {% if book.quantity != 0 %}
                                         <div class="btn-group">
                                             <form action="/books/{{book.id}}/delete" method="POST">
                                                 {% csrf_token %}
                                                 <button type="submit" class="btn btn-sm btn-outline-secondary">Delete</button>
                                             </form>
                                         </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

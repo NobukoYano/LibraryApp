@@ -16,7 +16,7 @@ urlpatterns = [
     path('addmanually', views.create_book_manually, name="book-addman"),
     path('confirm', views.confirm_book, name="confirm"),
     path('howto', views.howto, name="howto"),
-    path('ownedbooks', views.ownedbooks, name="ownedbooks"),
+    path('<int:user_id>/ownedbooks', views.ownedbooks, name="ownedbooks"),
 
 #    path('devoterlist',views.devoterlist,name = 'devoter')
     ]
