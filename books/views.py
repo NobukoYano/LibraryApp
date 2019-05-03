@@ -75,11 +75,10 @@ def create_book(request):
         # print(info.__getitem__('isbn'))
         book = form.save(commit=False)
 
-        # ToDo revise the condition for count up
+        # If same isbn & owner, count up
         thisISBN = book.isbn
-        existingISBN = Book.objects.filter(isbn=thisISBN)
-        existingTitle = Book.objects.filter(title=book.title)
-    
+        existingISBN = Book.objects.filter(isbn=thisISBN, owner=request.user)
+        # existingTitle = Book.objects.filter(title=book.title)
         if existingISBN.count() > 0:
             existingbook = existingISBN[0]
             existingbook.quantity += 1
@@ -91,19 +90,20 @@ def create_book(request):
 
             return HttpResponseRedirect('/books')
     
-        if existingTitle.count() > 0:
-            existingbook = existingTitle[0]
-            existingbook.quantity += 1
-            existingbook.save()
-            return HttpResponseRedirect('/books')
-            # save the image front internet
+        # if existingTitle.count() > 0:
+        #     existingbook = existingTitle[0]
+        #     existingbook.quantity += 1
+        #     existingbook.save()
+        #     return HttpResponseRedirect('/books')
+
+        print(request.user)
+        book.owner = request.user
 
         # Get image file from external url
         response = requests.get(book.cover_url)
         filename = str(book.id) + '_frontpage.jpg'
         book.cover_image.save(filename, ContentFile(response.content),
                               save=True)
-
         book.save()
 
         messages.success(request, 'The book ' +
@@ -231,6 +231,7 @@ def register(request):
 #        return render(request,'book/devote.html',context)
 
 
+@login_required(login_url='/accounts/login/')
 def search(request):
     if request.method == 'GET':
         isbn = request.GET.get('isbn', False)
@@ -257,16 +258,19 @@ def search(request):
             'author': data['author'],
             'publisher': data['publisher'],
             'pubdate': data['pubdate'],
+            # 'owner': request.user,
             })
         return render(request, 'book/confirm_book.html',
-                      {'form1': form, 'cover_url': data['cover']})
+                      {'form': form, 'cover_url': data['cover']})
 
 
+@login_required(login_url='/accounts/login/')
 def create_book_manually(request):
     f = BookForm()
     return render(request, 'book/add_book_manually.html', {'BookForm': f})
 
 
+@login_required(login_url='/accounts/login/')
 def confirm_book(request):
     print('book confirm')
     return HttpResponseRedirect("/books")
@@ -276,5 +280,6 @@ def howto(request):
     return render(request, 'book/howto.html')
 
 
+@login_required(login_url='/accounts/login/')
 def ownedbooks(request):
     return render(request, 'book/ownedbooks.html')
