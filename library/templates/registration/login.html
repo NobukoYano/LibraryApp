@@ -1,7 +1,5 @@
 {% extends 'book/base.html' %}
 {% block title %}Sign Up{% endblock %}
-{% block register_active %}active{% endblock %}
-
 {% block body %}
 
 {% load widget_tweaks %}
@@ -13,18 +11,18 @@
 
                 <div class="panel-body">
                     <br /><br />
-                    <form class="form-horizontal" role="form" action="{% url 'books:register'%} " method="post" enctype="multipart/form-data">
+                    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div align='center'>
                             <img class="mb-4" src="{% static 'shelf.png'%}" alt="not found" width="72" height="72">
-                            <h1 class="h3 mb-3 font-weight-normal">Sign up as a new account</h1>
+                            <h1 class="h3 mb-3 font-weight-normal">Log in!</h1>
                         </div>
                             {% include 'includes/form.html' %}
                             <br/>
                         <div align='center'>
                             <div class="form-group">
                                 <div class="col-sm">
-                                    <button class="btn btn-lg btn-dark" type="submit">Sign Up</button>
+                                    <button class="btn btn-lg btn-dark" type="submit">Login</button>
                                 </div>
                             </div>
                         </div>
@@ -34,7 +32,7 @@
                 </div>
 
                 <div class="panel-footer text-center">
-                    Already have an account? <a href="{% url 'login' %}">Click here</a> to Login.
+                    Forget a password? <a href="">Click here</a> to reset password.
                 </div>
                 <br/>
             </div>

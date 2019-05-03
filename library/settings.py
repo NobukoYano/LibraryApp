@@ -56,7 +56,7 @@ ROOT_URLCONF = 'library.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'library/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -143,3 +143,6 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+LOGIN_REDIRECT_URL = '/books'
+LOGOUT_REDIRECT_URL = '/'

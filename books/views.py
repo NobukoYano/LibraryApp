@@ -15,6 +15,8 @@ from django.db.models import Q
 from django.core.files.base import ContentFile
 import requests
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from datetime import date
 
 from .models import Book, BorrowRecord
 from .form import UserForm, BookForm
@@ -33,55 +35,24 @@ def top(request):
     return render(request, 'book/top.html', {'books': books})
 
 
+@login_required(login_url='/accounts/login/')
 def index(request):
-    if not request.user.is_authenticated:
+    books = Book.objects.all()
+    query = request.GET.get("q")
+    if query:
+        books = books.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query) |
+            Q(publisher__icontains=query)
+        ).distinct()
+        books.filter(~Q(quantity=0))
+        return render(request, 'book/homepage.html', {
+            'books': books,
+        })
+    else:
+        # books = Book.objects.filter(~Q(quantity = 0))
         books = Book.objects.all()
-        return HttpResponseRedirect('/books/login')
-    else:
-        books = Book.objects.all()
-        query = request.GET.get("q")
-        if query:
-            books = books.filter(
-                Q(title__icontains=query) |
-                Q(author__icontains=query) |
-                Q(publisher__icontains=query)
-            ).distinct()
-            books.filter(~Q(quantity=0))
-            return render(request, 'book/homepage.html', {
-                'books': books,
-            })
-        else:
-            # books = Book.objects.filter(~Q(quantity = 0))
-            books = Book.objects.all()
-            return render(request, 'book/homepage.html', {'books': books})
-
-
-def logout_user(request):
-    if not request.user.is_authenticated:
-        return render(request, 'book/login.html',
-                      {'error_message': 'Please login'})
-    else:
-        logout(request)
-        return HttpResponseRedirect('/books')
-
-
-def login_user(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-            # books = Book.objects.all()
-            # context = {
-            #     'books': books
-            # }
-            return HttpResponseRedirect('/books')
-        else:
-            return render(request, 'book/login_u.html',
-                          {'error_message': "Please sign up"})
-    else:
-        return render(request, 'book/login_u.html')
+        return render(request, 'book/homepage.html', {'books': books})
 
 
 # def Detail(request,book_id):
@@ -95,162 +66,160 @@ def login_user(request):
 #         return render(request,'book/item.html',context)
 
 
+@login_required(login_url='/accounts/login/')
 def create_book(request):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect('book/login')
-    else:
-        form = BookForm(request.POST or None, request.FILES or None)
-        # info = request.POST.copy()
-        if form.is_valid():
-            # print(info)
-            # print(info.__getitem__('isbn'))
-            book = form.save(commit=False)
+    form = BookForm(request.POST or None, request.FILES or None)
+    # info = request.POST.copy()
+    if form.is_valid():
+        # print(info)
+        # print(info.__getitem__('isbn'))
+        book = form.save(commit=False)
 
-            thisISBN = book.isbn
-            existingISBN = Book.objects.filter(isbn=thisISBN)
-            existingTitle = Book.objects.filter(title=book.title)
-            if existingISBN.count() > 0:
-                existingbook = existingISBN[0]
-                existingbook.quantity += 1
-                existingbook.save()
-                return HttpResponseRedirect('/books')
-            if existingTitle.count() > 0:
-                existingbook = existingTitle[0]
-                existingbook.quantity += 1
-                existingbook.save()
-                return HttpResponseRedirect('/books')
-            # save the image front internet
-            book.save()
-            response = requests.get(book.cover_url)
-            filename = str(book.id) + '_frontpage.jpg'
-            book.cover_image.save(filename, ContentFile(response.content),
-                                  save=True)
-            # book.cover_image.save(
-            #    os.path.basename(book.cover_url),
-            #    File(open(data[0], encoding="utf-8_sig"))
-            #    )
+        # ToDo revise the condition for count up
+        thisISBN = book.isbn
+        existingISBN = Book.objects.filter(isbn=thisISBN)
+        existingTitle = Book.objects.filter(title=book.title)
+    
+        if existingISBN.count() > 0:
+            existingbook = existingISBN[0]
+            existingbook.quantity += 1
+            existingbook.save()
 
-            book.save()
-
-            messages.success(request, 'The book ' +
-                             '{} was successfully added!'.format(book.title))
+            messages.success(
+                request, 'The book ' +
+                '{} was successfully counted up!'.format(book.title))
 
             return HttpResponseRedirect('/books')
-        # context = {
-        #    "form": form,
-        #    "all_user" : User.objects.all(),
-        # }
-        # return render(request, 'book/add_book.html', context)
+    
+        if existingTitle.count() > 0:
+            existingbook = existingTitle[0]
+            existingbook.quantity += 1
+            existingbook.save()
+            return HttpResponseRedirect('/books')
+            # save the image front internet
+
+        # Get image file from external url
+        response = requests.get(book.cover_url)
+        filename = str(book.id) + '_frontpage.jpg'
+        book.cover_image.save(filename, ContentFile(response.content),
+                              save=True)
+
+        book.save()
+
+        messages.success(request, 'The book ' +
+                         '{} was successfully added!'.format(book.title))
+
+        return HttpResponseRedirect('/books')
+    else:
+        # If form is not fulfilled
         return render(request, 'book/add_book.html')
 
 
+@login_required(login_url='/accounts/login/')
 def BorrowBook(request, book_id):
-    if not request.user.is_authenticated:
-        return render(request, 'book/login.html',
-                      {'error_message': "You need to login"})
-    else:
+    """borrowed a book"""
+    borrowRecords = BorrowRecord.objects.filter(
+        Borrower=request.user
+        ).filter(finished=False)
+    
+    # Limited the number to borrow a same book
+    # if borrowRecords.count() > 4:
+    #     return HttpResponseRedirect('/books')
+    
+    borrowed_books = set()
+    for record in borrowRecords:
+        borrowed_books.add(record.BookBorrowed.pk)
+    if book_id in borrowed_books:
+        messages.warning(request, 'You have already borrowed this book.')
+        return HttpResponseRedirect('/books')
 
+    user = request.user
+    book = Book.objects.get(pk=book_id)
+    record = BorrowRecord(Borrower=request.user, BookBorrowed=book)
+    if book.quantity >= 1:
+        book.quantity -= 1
+        book.save()
+        record.save()
+        messages.success(request, 'You have borrowed ' +
+                         '{} !'.format(book.title))
+        return HttpResponseRedirect("/books/%d/borrowed" % user.id)
+    else:
+        # not used the book can't be borrowed if quantity = 0.
+        messages.warning(request, 'This book is unavailable now.')
+        return HttpResponseRedirect('/books')
+
+
+@login_required(login_url='/accounts/login/')
+def returnBook(request, book_id):
+    borrowRecords = BorrowRecord.objects.filter(Borrower=request.user)
+    borrowed_books_id = set()
+    for record in borrowRecords:
+        borrowed_books_id.add(record.BookBorrowed.pk)
+    # borrowed_books = Book.objects.filter(pk__in=borrowed_books_id)
+
+    if book_id not in borrowed_books_id:
+        return HttpResponseRedirect('/books/%d/borrowed' % request.user.id)
+    else:
+        # print('success')
+        thisRecord = BorrowRecord.objects.filter(
+            Borrower=request.user,
+            BookBorrowed=Book.objects.get(id=book_id)
+            ).filter(finished=False)
+
+        thisRecord = thisRecord[0]
+        source = Book.objects.get(id=thisRecord.BookBorrowed.id)
+        source.quantity += 1
+        source.save()
+
+        thisRecord.EndTime = date.today()
+        thisRecord.finished = True
+        thisRecord.save()
+
+        messages.success(request, 'You have returned ' +
+                         '{} !'.format(source.title))
+
+        return HttpResponseRedirect('/books/%d/borrowed' % request.user.id)
+
+
+@login_required(login_url='/accounts/login/')
+def borrowed(request, user_id):
+    books = Book.objects.all()
+    query = request.GET.get("q")
+    if query:
+        books = books.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query) |
+            Q(publisher__icontains=query)
+        ).distinct()
+        books.filter(~Q(quantity=0))
+        return render(request, 'book/homepage.html', {
+            'books': books,
+        })
+    else:
         borrowRecords = BorrowRecord.objects.filter(
             Borrower=request.user
             ).filter(finished=False)
-        if borrowRecords.count() > 4:
-            return HttpResponseRedirect('/books')
         borrowed_books = set()
+
         for record in borrowRecords:
             borrowed_books.add(record.BookBorrowed.pk)
-        if book_id in borrowed_books:
-            messages.warning(request, 'You have already borrowed this book.')
-            return HttpResponseRedirect('/books')
 
-        user = request.user
-        book = Book.objects.get(pk=book_id)
-        record = BorrowRecord(Borrower=request.user, BookBorrowed=book)
-        if book.quantity >= 1:
-            book.quantity -= 1
-            book.save()
-            record.save()
-            return HttpResponseRedirect("/books/%d/borrowed" % user.id)
-        else:
-            # not used the book can't be borrowed if quantity = 0.
-            messages.warning(request, 'This book is unavailable now.')
-            return HttpResponseRedirect('/books')
+        borrowed_books = Book.objects.filter(pk__in=borrowed_books)
 
-
-def returnBook(request, book_id):
-    if not request.user.is_authenticated:
-        return render(request, 'books/login.html',
-                      {'error_message': "Please login first"})
-    else:
-        borrowRecords = BorrowRecord.objects.filter(Borrower=request.user)
-        borrowed_books_id = set()
-        for record in borrowRecords:
-            borrowed_books_id.add(record.BookBorrowed.pk)
-        # borrowed_books = Book.objects.filter(pk__in=borrowed_books_id)
-
-        if book_id not in borrowed_books_id:
-            return HttpResponseRedirect('/books/%d/borrowed' % request.user.id)
-        else:
-            # print('success')
-            thisRecord = BorrowRecord.objects.filter(
-                Borrower=request.user,
-                BookBorrowed=Book.objects.get(id=book_id)
-                ).filter(finished=False)
-
-            thisRecord = thisRecord[0]
-            source = Book.objects.get(id=thisRecord.BookBorrowed.id)
-            source.quantity += 1
-            source.save()
-
-            thisRecord.finished = True
-            thisRecord.save()
-
-            return HttpResponseRedirect('/books/%d/borrowed' % request.user.id)
-
-
-def borrowed(request, user_id):
-    user = request.user
-    if not user.is_authenticated:
-        return HttpResponseRedirect("/books/login")
-    else:
-        books = Book.objects.all()
-        query = request.GET.get("q")
-        if query:
-            books = books.filter(
-                Q(title__icontains=query) |
-                Q(author__icontains=query) |
-                Q(publisher__icontains=query)
-            ).distinct()
-            books.filter(~Q(quantity=0))
-            return render(request, 'book/homepage.html', {
-                'books': books,
-            })
-        else:
-            borrowRecords = BorrowRecord.objects.filter(
-                Borrower=request.user
-                ).filter(finished=False)
-            borrowed_books = set()
-
-            for record in borrowRecords:
-                borrowed_books.add(record.BookBorrowed.pk)
-
-            borrowed_books = Book.objects.filter(pk__in=borrowed_books)
-
-            return render(request, 'book/borrowed.html',
-                          {'books': borrowed_books})
+        return render(request, 'book/borrowed.html',
+                      {'books': borrowed_books})
 
 
 def register(request):
-    if request.method == 'POST' or request.method == 'GET':
-        form = UserForm(request.POST or None)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return HttpResponseRedirect('/books')
-        print(form.errors)    
-        return render(request, 'book/register.html', {'form': form})
-    else:
-        f = UserForm()
-        return render(request, 'book/register.html', {'form': f})
+
+    form = UserForm(request.POST or None)
+
+    if form.is_valid():
+        user = form.save()
+        login(request, user)
+        return HttpResponseRedirect('/books')
+
+    return render(request, 'book/register.html', {'form': form})
 
 # def devoterlist(request):
 #    if not request.user.is_authenticated:

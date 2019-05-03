@@ -11,10 +11,10 @@
         <!-- Custom styles for this template -->
 
         <main role="main">
-            {% if error_message %}
-            <div class="alert alert-warning" role="alert">
-                <strong>{{error_message}</strong>
-            </div>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+            {% endfor %}
             {% endif %}
 
 
