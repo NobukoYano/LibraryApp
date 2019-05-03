@@ -28,6 +28,10 @@ from . import openbd
 all_book = Book.objects.all()
 
 
+def query_borrowed(user_id):
+    books = Book.objects.all()
+    
+
 def query_book(query):
     books = Book.objects.all()
     books = books.filter(
@@ -183,30 +187,32 @@ def returnBook(request, book_id):
         messages.success(request, 'You have returned ' +
                          '{} !'.format(source.title))
 
+        # return render(request, 'book/borrowed.html',
+        #           {'books': borrowed_books})
+        print('here')
         return HttpResponseRedirect('/books/%d/borrowed' % request.user.id)
 
 
 @login_required(login_url='/accounts/login/')
 def borrowed(request, user_id):
+    books = Book.objects.all()
     query = request.GET.get("q")
     if query:
         books = query_book(query)
-        return render(request, 'book/homepage.html', {
-            'books': books,
-        })
-    else:
-        borrowRecords = BorrowRecord.objects.filter(
-            Borrower=request.user
-            ).filter(finished=False)
-        borrowed_books = set()
 
-        for record in borrowRecords:
-            borrowed_books.add(record.BookBorrowed.pk)
+    borrowRecords = BorrowRecord.objects.filter(
+        Borrower=request.user
+        ).filter(finished=False)
+    
+    borrowed_books_id = set()
 
-        borrowed_books = Book.objects.filter(pk__in=borrowed_books)
+    for record in borrowRecords:
+        borrowed_books_id.add(record.BookBorrowed.pk)
 
-        return render(request, 'book/borrowed.html',
-                      {'books': borrowed_books})
+    borrowed_books = books.filter(pk__in=borrowed_books_id)
+
+    return render(request, 'book/borrowed.html',
+                  {'books': borrowed_books})
 
 
 def register(request):
@@ -282,16 +288,18 @@ def howto(request):
 
 @login_required(login_url='/accounts/login/')
 def ownedbooks(request, user_id):
+    books = Book.objects.all()
     query = request.GET.get("q")
     if query:
         books = query_book(query)
-        # return HttpResponseRedirect("/books")
-        return render(request, 'book/homepage.html', {
-            'books': books,
-        })
-    else:
-        
-        owned_books = Book.objects.filter(owner=user_id)
 
-        return render(request, 'book/ownedbooks.html',
+    owned_books = books.filter(owner=user_id)
+
+    return render(request, 'book/ownedbooks.html',
                       {'books': owned_books})
+
+
+@login_required(login_url='/accounts/login/')
+def delete(request, book_id):
+
+    return HttpResponseRedirect("/books/"+request.user.id+"ownedbooks")

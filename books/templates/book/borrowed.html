@@ -5,19 +5,18 @@
         <hr class="m-y-md">
         <p>View borrowed books</p>                
     </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
     {% if books %}
     <ul>
         {% load staticfiles %}
         <!-- Custom styles for this template -->
 
         <main role="main">
-            {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
-            {% endfor %}
-            {% endif %}
-
-
             <div class="container">
                 <div class="row">
                     {% for book in books %}
@@ -59,12 +58,9 @@
         </ul>
         {% else %}
         <br\>
-        <br\>
-        <div class="uk-margin-large" style="text-align: center">
-            <span class="uk-text-meta">You have not borrowed books yet</span>
-            <a href="/books">
-                <span class="uk-text-meta">Borrow a book</span>
-            </a>
+        <div class="container" style="text-align: center">
+            <h1 class="display-3">Sorry!</h1>
+            <p class="lead">There are no borrowed books...</p>
         </div>
         {% endif %}
     </div>

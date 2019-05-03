@@ -5,18 +5,17 @@
         <hr class="m-y-md">
         <p>This is our library</p>                
     </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+            
     {% if books %}
     <ul>
         <br\>
         <br\>
         <main role="main">
-
-            {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
-            {% endfor %}
-            {% endif %}
-            
             <div class="container">
                 <div class="row">
                     {% for book in books %}
@@ -68,11 +67,9 @@
         </main>
     </ul>
     {% else %}
-        <div class="jumbotron jumbotron-fluid">
-            <div class="container">
-                <h1 class="display-3">Sorry!</h1>
-                <p class="lead">There is no book in a library</p>
-            </div>
+        <div class="container" style="text-align: center">
+            <h1 class="display-3">Sorry!</h1>
+            <p class="lead">There is no book in a library</p>
         </div>
     {% endif %}
 </div>

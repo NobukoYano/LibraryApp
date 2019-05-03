@@ -6,6 +6,12 @@
         <hr class="m-y-md">
         <p>Your owned books here</p>                
     </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
     {% if books %}
     <ul>
         {% load static %}
@@ -55,6 +61,11 @@
 
             </main>
     </ul>
+    {% else %}
+        <div class="container" style="text-align: center">
+            <h1 class="display-3">Sorry!</h1>
+            <p class="lead">There are no owned books...</p>
+        </div>
     {% endif %}
 </div>
 {%endblock%}
