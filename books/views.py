@@ -267,7 +267,8 @@ def search(request):
 @login_required(login_url='/accounts/login/')
 def create_book_manually(request):
     f = BookForm()
-    return render(request, 'book/add_book_manually.html', {'BookForm': f})
+    return render(request, 'book/confirm_book.html', {'form': f})
+    # return render(request, 'book/add_book_manually.html', {'form': f})
 
 
 @login_required(login_url='/accounts/login/')

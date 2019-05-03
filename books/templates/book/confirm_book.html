@@ -6,26 +6,31 @@
 {% load staticfiles %}
 <div class="container-fluid" id = 'form-container'>
 
-    <div class="col-sm-12 col-md-10" align="center" id = 'form-container'>
+    <div class="col-sm-12 col-md-12" align="center" id = 'form-container'>
         <div class="panel panel-default">
             <div class="panel-body">
-                <div class="jumbotron">
-                    <p class="lead"><font size = '6'>Confirm a new book</font></p>
-                    <hr class="m-y-md">
-                    <p>Please check the following information! <br/> 
-                        You can also edit the information if needed.
-                    </p>
-                </div>
+
                 <form class="form-horizontal" role="form" action="{% url 'books:book-add' %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
+                    <div>
+                        <br/>
+                        <h2 class="mb-3 font-weight-normal">Book Information</h2>
+                    </div>
+                    <hr/>
                     <div class="row justify-content-center">
                         <div class="col-sm-5">
+                            <br/>
                             <img src="{{cover_url}}" class="img-fluid">
-                            <table>{{form.as_table}}</table>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-sm-3 text-left">
+                            {% include 'includes/form.html' %}
+                            {% comment %}<table>{{form.as_table}}</table>{% endcomment %}
                         </div>
                     </div>
                     <div class="col-sm-12">&nbsp;</div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-12">
                         <button type="submit" class="btn btn-dark">Add book</button>
                     </div>
                 </form>
