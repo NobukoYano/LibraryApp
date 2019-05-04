@@ -8,33 +8,34 @@
 <div class="container-fluid" id = 'form-container'>
 
     <div class="justify-content-center text-center" id = 'form-container'>
-                <div class="jumbotron">
-                    <p class="lead"><font size = '6'><strong>Add a new book</strong></font></p>
-                    <hr class="m-y-md">
-                    <p>Enter the 13 digits ISBN number and click search button! <br/> If you want to input manually, click
-                    <a href="/books/addmanually">
-                        <span class="uk-text-meta">here</span>
-                    </a>
-                    </p>
-                </div>
-                {% if messages %}
-                {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
-                {% endfor %}
-                {% endif %}
+        <div class="jumbotron">
+            <p class="lead"><font size = '6'><strong>Add a new book</strong></font></p>
+            <hr class="m-y-md">
+            <p>Enter the 13 digits ISBN number and click search button! <br/> If you want to input manually, click
+                <a href="/books/addmanually">
+                    <span class="uk-text-meta">here</span>
+                </a>
+            </p>
+        </div>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
 
-                <form class="form-horizontal" role="form" action="{% url 'books:search' %}" method="GET" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="form-row justify-content-center">
-                        <div class="col-sm-4 align-self-center">
-                            <input class="form-control" type="text" name="isbn" required maxlength="20" placeholder="Please input ISBN code"/>
-                        </div>
-                        <div class="col-sm-12">&nbsp;</div>
-                        <div class="col-sm-4">
-                            <button class="btn btn-dark" v-on:click="regist">search</button>
-                        </div>
-                    </div>
-                </form>
+        <form class="form-horizontal" role="form" action="{% url 'books:search' %}" method="GET" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-row justify-content-center">
+                <div class="col-sm-4 align-self-center">
+                    <input class="form-control" type="text" name="isbn" required maxlength="20" placeholder="Please input ISBN code"/>
+                </div>
+                <div class="col-sm-12">&nbsp;</div>
+                <div class="col-sm-4">
+                    <button class="btn btn-dark" v-on:click="regist">search</button>
+                </div>
+            </div>
+        </form>
+        <br/>
     </div>
 </div>
 

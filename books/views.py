@@ -125,7 +125,7 @@ def create_book(request):
 
 
 @login_required(login_url='/accounts/login/')
-def BorrowBook(request, book_id):
+def borrowBook(request, book_id):
     """borrowed a book"""
     borrowRecords = BorrowRecord.objects.filter(
         Borrower=request.user
@@ -144,6 +144,11 @@ def BorrowBook(request, book_id):
 
     user = request.user
     book = Book.objects.get(pk=book_id)
+
+    if book.owner == request.user:
+        messages.warning(request, "You cant'tborrow your own book.")
+        return HttpResponseRedirect('/books')
+
     record = BorrowRecord(Borrower=request.user, BookBorrowed=book)
     if book.quantity >= 1:
         book.quantity -= 1
@@ -300,6 +305,27 @@ def ownedbooks(request, user_id):
 
 
 @login_required(login_url='/accounts/login/')
-def delete(request, book_id):
+def deleteBook(request, book_id):
+    books = Book.objects.filter(pk=book_id, owner=request.user) 
+    if books is None:
+        messages.warning("The book was not found.")
 
-    return HttpResponseRedirect("/books/"+request.user.id+"ownedbooks")
+    if books[0].quantity == 0:
+        messages.warning("The book was not found.")
+
+    elif books[0].quantity >= 2:
+        book = books[0]
+        book.quantity -= 1
+        book.save()
+        messages.success(
+            request,
+            "One of the books '{}' was deleted.".format(book.title)
+            )
+    else:
+        book = books[0]
+        book.delete()
+        messages.success(
+            request,
+            "The book '{}' was fully deleted.".format(book.title)
+            )
+    return HttpResponseRedirect("/books/"+str(request.user.id)+"/ownedbooks")
