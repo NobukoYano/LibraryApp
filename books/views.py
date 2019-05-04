@@ -50,7 +50,7 @@ def top(request):
     return render(request, 'book/top.html', {'books': books})
 
 
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/')
 def index(request):
     query = request.GET.get("q")
     if query:

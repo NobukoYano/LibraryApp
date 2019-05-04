@@ -4,11 +4,17 @@
   <meta charset="UTF-8">
   <title>{% block title %}Library App{% endblock %}</title>
   {% load staticfiles %}
-  <link rel="shortcut icon" type="image/png" href="{%  static 'shelf.png' %}"/>
+  <link rel="shortcut icon" type="image/png" class="mx-auto" href="{%  static 'logo.png' %}"/>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   
   <link href="{% static 'open-iconic-master/font/css/open-iconic-bootstrap.css' %}" rel="stylesheet">
+  <style type="text/css"><!--
+  .jumbotron {
+    background: white url("/static/books_background3.jpg") center no-repeat; background-size: cover;}
+  --></style>
+
+</head>
   
 
   <style>
@@ -37,8 +43,8 @@
     <div class="container-fluid">
       <!-- Items -->
       <a class="navbar-brand" href="{% url 'books:homepage' %}">
-        <img src="{% static 'shelf_w.png'%}" height=25 width=25 class="d-inlune-block align-top" />
-      Library App</a>
+        <img src="{% static 'logo_w.png'%}" height=30 class="mx-auto d-block align-center rounded" />
+      </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -79,6 +85,10 @@
           {% endif %}
         </ul>
         {% if user.is_authenticated %}
+        <span class="navbar-text">
+          <span class="oi oi-person" title="user" aria-hidden="true" ></span>
+          <span class="mr-3">{{ user.first_name }}</span>
+        </span>
         <form class="form-inline my-2 my-lg-0">
           <input class="form-control mr-sm-2" type="search" name = 'q' value="{{ request.GET.q }}" placeholder="title，author，ISBN" aria-label="Search">
           <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
@@ -91,7 +101,7 @@
   {% endblock %}
   <footer class="text-muted">
     <div class="container text-center">
-      <p>© Library App {% now "Y" %}</p>
+      <p>© Bibly {% now "Y" %}</p>
     </div>
   </footer>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

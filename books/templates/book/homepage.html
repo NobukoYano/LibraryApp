@@ -1,7 +1,9 @@
 {% extends 'book/base.html'%} {%block body%}
+{% load static %}
 <div>
     <div class="jumbotron text-center" >
-        <p class="lead"><font size = '6'>Welcome to Library App</font></p>
+        <img class="mb-4" src="{% static 'logo.png'%}" alt="not found" width="80" height="80">
+        <p class="lead"><font size = '6'><strong>Welcome to Bibly!!</strong></font></p>
         <hr class="m-y-md">
         <p>This is our library</p>                
     </div>

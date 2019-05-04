@@ -16,8 +16,7 @@
                     <form class="form-horizontal" role="form" action="{% url 'books:register'%} " method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div align='center'>
-                            <img class="mb-4" src="{% static 'shelf.png'%}" alt="not found" width="72" height="72">
-                            <h1 class="h3 mb-3 font-weight-normal">Sign up as a new account</h1>
+                            <img class="mb-4" src="{% static 'logo.png'%}" alt="not found" width="100" height="100">
                         </div>
                             {% include 'includes/form.html' %}
                             <br/>
