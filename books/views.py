@@ -329,3 +329,26 @@ def deleteBook(request, book_id):
             "The book '{}' was fully deleted.".format(book.title)
             )
     return HttpResponseRedirect("/books/"+str(request.user.id)+"/ownedbooks")
+
+
+@login_required(login_url='/accounts/login/')
+def borrow_req(request, book_id):
+    books = Book.objects.filter(pk=book_id)
+    messages.success(
+            request,
+            "You have sent an email to borrow '{}' owned by {}."
+            .format(books[0].title, books[0].owner.first_name)
+            )
+    return HttpResponseRedirect("/books/")
+
+
+@login_required(login_url='/accounts/login/')
+def return_req(request, book_id):
+    books = Book.objects.filter(pk=book_id)
+    messages.success(
+            request,
+            "You have sent an email to return '{}' owned by {}."
+            .format(books[0].title, books[0].owner.first_name)
+            )
+    print('test here#####')
+    return HttpResponseRedirect("/books/"+str(request.user.id)+"/borrowed")

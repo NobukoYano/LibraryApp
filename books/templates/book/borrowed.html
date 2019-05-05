@@ -7,7 +7,7 @@
     </div>
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+            <div class="alert alert-{{ message.tags }} text-center" role="alert">{{ message }}</div>
         {% endfor %}
     {% endif %}
 
@@ -38,10 +38,10 @@
                                     </p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
-                                            <a href="">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">Contact</button>
-                                            </a>
-                                            <form action="/books/{{book.id}}/return" method="POST">
+                                            <form action="{% url 'books:return_req' book.id %}">
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary">Contact</button>
+                                            </form>
+                                            <form action="{% url 'books:return' book.id %}" method="POST">
                                                 {% csrf_token %}
                                                 <button type="submit" class="btn btn-sm btn-outline-secondary">Return</button>
                                             </form>                                            

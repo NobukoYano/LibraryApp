@@ -3,13 +3,13 @@
 <div>
     <div class="jumbotron text-center" >
         <img class="mb-4" src="{% static 'logo.png'%}" alt="not found" width="80" height="80">
-        <p class="lead"><font size = '6'><strong>Welcome to Bibly!!</strong></font></p>
+        <p class="lead"><font size = '6'><strong>Welcome to Biblio!!</strong></font></p>
         <hr class="m-y-md">
         <p>This is our library</p>                
     </div>
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+            <div class="alert alert-{{ message.tags }} text-center" role="alert">{{ message }}</div>
         {% endfor %}
     {% endif %}
             
@@ -44,7 +44,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     {% if book.quantity != 0 %}
                                     <div class="btn-group">
-                                        <a href="">
+                                        <a href="{% url 'books:borrow_req' book.id %}">
                                             <button type="button" class="btn btn-sm btn-outline-secondary">Contact</button>
                                         </a>                                        
                                         <form action="{{book.id}}/borrow" method="POST">
