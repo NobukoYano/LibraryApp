@@ -45,7 +45,7 @@
                                     {% if book.quantity != 0 %}
                                     <div class="btn-group">
                                         <a href="{% url 'books:borrow_req' book.id %}">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">Contact</button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">Request</button>
                                         </a>                                        
                                         <form action="{{book.id}}/borrow" method="POST">
                                             {% csrf_token %}

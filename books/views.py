@@ -17,6 +17,7 @@ import requests
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from datetime import date
+from django.core.mail import EmailMessage
 
 from .models import Book, BorrowRecord
 from .form import UserForm, BookForm
@@ -154,6 +155,15 @@ def borrowBook(request, book_id):
         book.quantity -= 1
         book.save()
         record.save()
+
+        email = EmailMessage(
+            '{} has borrowed {}'.format(request.user.first_name, book.title),
+            '*** This is automatically generated email, please do not reply.\n',
+            to=[book.owner.email,],
+            cc=[request.user.email,],
+        )
+        email.send()
+
         messages.success(request, 'You have borrowed ' +
                          '{} !'.format(book.title))
         return HttpResponseRedirect("/books/%d/borrowed" % user.id)
@@ -188,6 +198,14 @@ def returnBook(request, book_id):
         thisRecord.EndTime = date.today()
         thisRecord.finished = True
         thisRecord.save()
+
+        email = EmailMessage(
+            '{} has returned {}'.format(request.user.first_name, source.title),
+            '*** This is automatically generated email, please do not reply.\n',
+            to=[source.owner.email,],
+            cc=[request.user.email,],
+        )
+        email.send()
 
         messages.success(request, 'You have returned ' +
                          '{} !'.format(source.title))
@@ -334,6 +352,29 @@ def deleteBook(request, book_id):
 @login_required(login_url='/accounts/login/')
 def borrow_req(request, book_id):
     books = Book.objects.filter(pk=book_id)
+
+    email = EmailMessage(
+        'Borrow Request for {}'.format(books[0].title),
+        'Hi, \nI would like to borrow this book.\n' +
+        'Please contact me just replying this email! \n\n' +
+        '  book : {} \n'.format(books[0].title) +
+        '  Name : {} {} \n'.format(request.user.last_name, request.user.first_name) +
+        '  email : {} \n\n'.format(request.user.email) +
+        'Best, \nBiblio Team',
+        to=[books[0].owner.email,],
+        reply_to=[request.user.email,],
+        cc=[request.user.email,],
+    )
+    email.send()
+
+    # subject = 'Borrow Request for {}'.format(books[0].title)
+    # body = 'Hi, I would like to borrow this book./n' +
+    #        'Please contact me! /n' +
+    #        'Name : {} {}'.format(request.user.last_name, request.user.first_name) +
+    #        'email : {}'.format(request.user.email)
+    # sender = request.user.email
+    # receiver = [books[0].owner.email,]
+    # send_mail(subject, body, sender, receiver)
     messages.success(
             request,
             "You have sent an email to borrow '{}' owned by {}."
@@ -345,10 +386,24 @@ def borrow_req(request, book_id):
 @login_required(login_url='/accounts/login/')
 def return_req(request, book_id):
     books = Book.objects.filter(pk=book_id)
+
+    email = EmailMessage(
+        'Return Request for {}'.format(books[0].title),
+        'Hi, \nThanks for lending me this book. I would like to return it.\n' +
+        'Please contact me just replying this email! \n\n' +
+        '  book : {} \n'.format(books[0].title) +
+        '  Name : {} {} \n'.format(request.user.last_name, request.user.first_name) +
+        '  email : {} \n\n'.format(request.user.email) +
+        'Best, \nBiblio Team',
+        to=[books[0].owner.email,],
+        reply_to=[request.user.email,],
+        cc=[request.user.email,],
+    )
+    email.send()
+
     messages.success(
             request,
             "You have sent an email to return '{}' owned by {}."
             .format(books[0].title, books[0].owner.first_name)
             )
-    print('test here#####')
     return HttpResponseRedirect("/books/"+str(request.user.id)+"/borrowed")
