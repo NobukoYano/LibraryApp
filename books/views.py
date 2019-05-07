@@ -22,6 +22,7 @@ from django.core.mail import EmailMessage
 from .models import Book, BorrowRecord
 from .form import UserForm, BookForm
 from . import openbd
+from . import rakutenapi
 
 
 # Create your views here.
@@ -275,9 +276,21 @@ def search(request):
         api = openbd.openBD()
         data = api.get_json(isbn)
 
-        if data is None:
+        rakuten_api = rakutenapi.rakuten()
+        rakuten_data = rakuten_api.get_json(isbn)
+
+        # if both datas are None
+        if data is None and rakuten_data is None:
             messages.warning(request, 'The book was not found!')
             return render(request, 'book/add_book.html')
+
+        # if openbd is None
+        if data is None:
+            data = rakuten_data
+
+        # if only cover page is blank
+        if data['cover'] is '':
+            data['cover'] = rakuten_data['cover']
 
         form = BookForm({
             'isbn': data['isbn'],
@@ -286,7 +299,7 @@ def search(request):
             'author': data['author'],
             'publisher': data['publisher'],
             'pubdate': data['pubdate'],
-            # 'owner': request.user,
+            'location': 21,
             })
         return render(request, 'book/confirm_book.html',
                       {'form': form, 'cover_url': data['cover']})

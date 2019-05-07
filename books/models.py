@@ -6,6 +6,14 @@ from django.urls import reverse
 
 # Create your models here.
 class Book(models.Model):
+    CHOICES = (
+        (11, 'Tokyo'),
+        (12, 'Osaka'),
+        (13, 'Fukuoka'),
+        (21, 'Berlin'),
+        (22, 'Hamburg'),
+    )
+
     isbn = models.CharField(max_length=30)
     title = models.CharField(max_length=250)
     cover_url = models.URLField(blank=True)
@@ -16,6 +24,10 @@ class Book(models.Model):
     pubdate = models.CharField(max_length=20)
     regdate = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    location = models.IntegerField(
+        choices=CHOICES,
+        default=21
+    )
 
     def get_absolute_urls(self):
         return reverse(

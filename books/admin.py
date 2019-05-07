@@ -6,6 +6,7 @@ from .models import Book, BorrowRecord
 
 class BookAdmin(admin.ModelAdmin):
     readonly_fields = ('regdate',)
+    list_display=['get_location_display']
 
 
 class BorrowRecordAdmin(admin.ModelAdmin):

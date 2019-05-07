@@ -36,4 +36,5 @@ class BookForm(forms.ModelForm):
             'author',
             'publisher',
             'pubdate',
+            'location',
             ]
