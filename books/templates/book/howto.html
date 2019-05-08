@@ -1,11 +1,110 @@
 {% extends 'book/base.html'%} 
+{% load staticfiles%}
 {%block body%}
-<div id = 'form-container'>
-    <div class="jumbotron" >
-        <p class="lead"><font size = '6'>How To Use Library App</font></p>
-        <hr class="m-y-md">
-        <p>Quick guide for users!</p>                
-    </div>
+<div class="jumbotron text-center">
+	<p class="lead"><font size = '6'><strong>How To Use Biblio</strong></font></p>
+	<hr class="m-y-md">
+	<p>Quick guide for users!</p>                
+</div>
+
+<div class="container ">
+	<!--Accordion wrapper-->
+	<div class="row">
+	<div class="col-md-11 accordion md-accordion" id="accordionEx1" role="tablist" aria-multiselectable="true">
+
+		<!-- Accordion card -->
+		<div class="card ">
+
+			<!-- Card header -->
+			<div class="card-header" role="tab" id="headingTwo1">
+				<a class="collapsed" data-toggle="collapse" data-parent="#accordionEx1" href="#collapseTwo1"
+				aria-expanded="false" aria-controls="collapseTwo1">
+				<h6 class="mb-0">
+					How to add books? 
+				</h6>
+			</a>
+		</div>
+
+		<!-- Card body -->
+		<div id="collapseTwo1" class="collapse" role="tabpanel" aria-labelledby="headingTwo1"
+		data-parent="#accordionEx1">
+		<div class="col-md-10 ">
+			<img class="card-img-top" src="{% static 'faq/add_book.png' %}" alt="no image"/>
+		</div>
+		<div class="card-body">
+			<p>Just click the +Add button in the menu, then enter the 13 digits of isbn code.</p>
+		</div>
+		<div class="col-md-10 ">
+			<img class="card-img-top" src="{% static 'faq/confirm_book.png' %}" alt="no image"/>
+		</div>
+
+		<div class="card-body">
+			<p>Check the content and click add book button!</p>
+		</div>
+	</div>
+</div>
+<!-- Accordion card -->
+
+<!-- Accordion card -->
+<div class="card">
+
+	<!-- Card header -->
+	<div class="card-header" role="tab" id="headingTwo2">
+		<a class="collapsed" data-toggle="collapse" data-parent="#accordionEx1" href="#collapseTwo21"
+		aria-expanded="false" aria-controls="collapseTwo21">
+		<h6 class="mb-0">
+			How to borrow books?
+		</h6>
+	</a>
+</div>
+
+<!-- Card body -->
+<div id="collapseTwo21" class="collapse" role="tabpanel" aria-labelledby="headingTwo21"
+data-parent="#accordionEx1">
+	<div class="col-md-10 ">
+		<img class="card-img-top" src="{% static 'faq/borrow_book.png' %}" alt="no image"/>
+	</div>
+
+	<div class="card-body">
+		<p>Click the request button of the book in a homepage. The request mail will be automatically sent out to the book's owner so that you can communicate with owner where and when to borrow the book.</p>
+		<p>After you borrowed the book, click borrow button. You can see all books you borrowed in a <span class="oi oi-book"></span> borrowed page</p>
+	</div>
+</div>
 
 </div>
+<!-- Accordion card -->
+
+<!-- Accordion card -->
+<div class="card">
+
+	<!-- Card header -->
+	<div class="card-header" role="tab" id="headingThree31">
+		<a class="collapsed" data-toggle="collapse" data-parent="#accordionEx1" href="#collapseThree31"
+		aria-expanded="false" aria-controls="collapseThree31">
+		<h6 class="mb-0">
+			How to return books? <i class="fas fa-angle-down rotate-icon"></i>
+		</h6>
+	</a>
+</div>
+
+<!-- Card body -->
+<div id="collapseThree31" class="collapse" role="tabpanel" aria-labelledby="headingThree31"
+data-parent="#accordionEx1">
+	<div class="col-md-10 ">
+			<img class="card-img-top" src="{% static 'faq/borrow_book.png' %}" alt="no image"/>
+	</div>
+
+	<div class="card-body">
+		<p>Got to the <span class="oi oi-book"></span> borrowed books page, then click the request button of the book. The request mail will be automatically sent out to the book's owner so that you can communicate with owner where and when to return the book.</p>
+	</div>
+</div>
+
+</div>
+<!-- Accordion card -->
+
+</div>
+<!-- Accordion wrapper -->
+</div>
+</div>
+<br/>
 {%endblock%}

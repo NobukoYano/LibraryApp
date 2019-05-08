@@ -101,14 +101,8 @@ def create_book(request):
 
             return HttpResponseRedirect('/books')
     
-        # if existingTitle.count() > 0:
-        #     existingbook = existingTitle[0]
-        #     existingbook.quantity += 1
-        #     existingbook.save()
-        #     return HttpResponseRedirect('/books')
-
-        print(request.user)
         book.owner = request.user
+        book.save()
 
         # Get image file from external url
         response = requests.get(book.cover_url)
