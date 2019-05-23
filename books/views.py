@@ -129,8 +129,9 @@ def borrowBook(request, book_id):
         ).filter(finished=False)
     
     # Limited the number to borrow a same book
-    # if borrowRecords.count() > 4:
-    #     return HttpResponseRedirect('/books')
+    if borrowRecords.count() > 4:
+        messages.warning(request, "You have already borrowed 5 books.")
+        return HttpResponseRedirect('/books')
     
     borrowed_books = set()
     for record in borrowRecords:
@@ -143,7 +144,7 @@ def borrowBook(request, book_id):
     book = Book.objects.get(pk=book_id)
 
     if book.owner == request.user:
-        messages.warning(request, "You cant'tborrow your own book.")
+        messages.warning(request, "You cant't borrow your own book.")
         return HttpResponseRedirect('/books')
 
     record = BorrowRecord(Borrower=request.user, BookBorrowed=book)
@@ -154,7 +155,7 @@ def borrowBook(request, book_id):
 
         email = EmailMessage(
             '{} has borrowed {}'.format(request.user.first_name, book.title),
-            '*** This is automatically generated email, please do not reply.\n',
+            '*** This is automatically generated email, please do not reply ***\n',
             to=[book.owner.email,],
             cc=[request.user.email,],
         )
@@ -197,7 +198,7 @@ def returnBook(request, book_id):
 
         email = EmailMessage(
             '{} has returned {}'.format(request.user.first_name, source.title),
-            '*** This is automatically generated email, please do not reply.\n',
+            '*** This is automatically generated email, please do not reply ***\n',
             to=[source.owner.email,],
             cc=[request.user.email,],
         )
