@@ -25,10 +25,11 @@ they are stored in
 
 # Features
 **1. Add a book** 
-you can add a book 
+you can add your book 
  - enter isbn code and search (extract infos from openbd API) or 
  - enter all information manually.
 
 **2. Borrow a book**
 you can borrow a book if it's available. 
 you can also see all of borrowed books on My Bookshelf and return it.
+
