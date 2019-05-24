@@ -32,4 +32,3 @@ you can add your book
 **2. Borrow a book**
 you can borrow a book if it's available. 
 you can also see all of borrowed books on My Bookshelf and return it.
-
