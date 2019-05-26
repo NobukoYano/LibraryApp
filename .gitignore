@@ -11,3 +11,4 @@ db.sqlite3
 /media
 /static
 sent_emails
+myvenv
