@@ -5,15 +5,21 @@ Runs on django 2.2 and some little tools.
 
 # Usage
 
-The environment is already built in the myvenv, you can run 
-```pip install virtualenv```
-```cd [the project repo] ```
-```source myvenv/Script/activate ```
-to start the virtualenv, then run 
-```python manage.py runserver ``` 
-to start the service, the web runs on **127.0.0.1:8000/books** as default
+Please use virtual environment.   
+```pip install virtualenv```  
+```cd [the project repo] ```  
 
-to entry admin page, use 
+to start the virtualenv  
+```source myvenv/Script/activate ```  
+
+to install all of dependencies  
+```pip install -r requirements.txt ```  
+
+to start service,  
+```python manage.py runserver ```  
+the web runs on **127.0.0.1:8000/books** as default
+
+to entry admin page, use   
 ```python manage.py createsuperuser```
 
 # Static Files
