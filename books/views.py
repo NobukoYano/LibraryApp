@@ -272,21 +272,15 @@ def search(request):
         api = openbd.openBD()
         data = api.get_json(isbn)
 
-        rakuten_api = rakutenapi.rakuten()
-        rakuten_data = rakuten_api.get_json(isbn)
+        # if openBD data is None or cover of openBD is blank
+        if data is None or data['cover'] == '':
+            rakuten_api = rakutenapi.rakuten()
+            data = rakuten_api.get_json(isbn)
 
-        # if both datas are None
-        if data is None and rakuten_data is None:
+        # if data is None
+        if data is None:
             messages.warning(request, 'The book was not found!')
             return render(request, 'book/add_book.html')
-
-        # if openbd is None
-        if data is None:
-            data = rakuten_data
-
-        # if only cover page is blank
-        if data['cover'] is '':
-            data['cover'] = rakuten_data['cover']
 
         form = BookForm({
             'isbn': data['isbn'],

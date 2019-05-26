@@ -29,6 +29,9 @@ class rakuten:
 
         data = json.loads(r.text)
 
+        if data['count'] == 0:
+            return None
+
         json_data = {}
         json_data['isbn'] = data['Items'][0]['Item']['isbn']
         json_data['title'] = data['Items'][0]['Item']['title']
