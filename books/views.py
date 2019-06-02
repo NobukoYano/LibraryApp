@@ -63,7 +63,7 @@ def index(request):
     else:
         # books = Book.objects.filter(~Q(quantity = 0))
         # books = Book.objects.all()
-        books = Book.objects.order_by('-regdate')[:24]
+        books = Book.objects.order_by('-regdate')[:20]
         return render(request, 'book/homepage.html', {'books': books})
 
 
