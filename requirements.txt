@@ -1,6 +1,6 @@
 certifi==2019.3.9
 chardet==3.0.4
-Django==2.2
+Django==2.2.27
 django-widget-tweaks==1.4.3
 entrypoints==0.3
 flake8==3.7.7
